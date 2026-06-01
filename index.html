@@ -1,0 +1,3161 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Winners &amp; Qualifiers</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@400;700;800;900&family=Archivo:ital,wght@0,400;0,500;0,700;1,400&family=JetBrains+Mono:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet" />
+  <script>
+    !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]);t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.crossOrigin="anonymous",p.async=!0,p.src=s.api_host+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(a!==void 0?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="init capture register register_once register_for_session unregister unregister_for_session getFeatureFlag getFeatureFlagPayload isFeatureEnabled reloadFeatureFlags updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures on onFeatureFlags onSessionId getSurveys getActiveMatchingSurveys renderSurvey canRenderSurvey identify setPersonProperties group resetGroups setPersonPropertiesForFlags resetPersonPropertiesForFlags setGroupPropertiesForFlags resetGroupPropertiesForFlags reset get_distinct_id getGroups get_session_id get_session_replay_url alias set_config startSessionRecording stopSessionRecording sessionRecordingStarted captureException loadToolbar get_property getSessionProperty createPersonProfile opt_in_capturing opt_out_capturing has_opted_in_capturing has_opted_out_capturing clear_opt_in_out_capturing debug".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
+    posthog.init("phc_wZvQquK98VHJR6KaTr4HNQPheoegkkDSroN2rYgE55Y6", { api_host: "https://eu.i.posthog.com", person_profiles: "identified_only" });
+  </script>
+  <style>
+/* ─── TOKENS ───────────────────────────────────────────────────────────────── */
+:root {
+  /* Palette */
+  --bg:         #E0E0D0;
+  --bg-deep:    #D6D6C5;
+  --paper:      #ECECDE;
+  --ink:        #333333;
+  --ink-soft:   #5A5A52;
+  --ink-faint:  #8A8A7E;
+  --line:       rgba(51,51,51,0.22);
+  --line-soft:  rgba(51,51,51,0.10);
+  --neon:       #DFFF00;
+  --neon-deep:  #C8E600;
+  --neon-shadow:rgba(223,255,0,0.55);
+  --danger:     #C8421A;
+  --grid-size:  28px;
+
+  /* Legacy aliases (keeps JS/older CSS working) */
+  --accent:  #DFFF00;
+  --text:    #333333;
+  --muted:   #888870;
+  --error:   #B83232;
+  --success: #2A7A54;
+  --card:    rgba(255,255,255,0.30);
+
+  /* Constructivist typographic pairing */
+  --serif: "Big Shoulders Display", "Archivo Black", Impact, sans-serif;
+  --sans:  "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --mono:  "JetBrains Mono", "Courier New", ui-monospace, monospace;
+
+  /* Title modifiers for this pairing */
+  --title-weight:    800;
+  --title-style:     normal;
+  --title-tracking:  -0.01em;
+  --title-transform: uppercase;
+}
+
+/* ─── RESET ─────────────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* ─── BASE ───────────────────────────────────────────────────────────────────── */
+body {
+  font-family: var(--sans);
+  font-size: 15px;
+  color: var(--ink);
+  background-color: var(--bg);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Cuadrícula de fondo — fija, no se desplaza con el contenido */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(to right,  var(--line-soft) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--line-soft) 1px, transparent 1px);
+  background-size: var(--grid-size) var(--grid-size);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Textura puntillada sutil */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image: radial-gradient(rgba(51,51,51,0.04) 1px, transparent 1px);
+  background-size: 3px 3px;
+  pointer-events: none;
+  z-index: 0;
+  mix-blend-mode: multiply;
+  opacity: 0.5;
+}
+
+/* ─── APP SHELL ──────────────────────────────────────────────────────────────── */
+.app {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 36px 48px 80px;
+}
+
+/* ─── SCREENS ────────────────────────────────────────────────────────────────── */
+.screen { display: none; position: relative; }
+.screen.visible { display: block; animation: screenIn 360ms cubic-bezier(.2,.7,.2,1); }
+@keyframes screenIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ─── CLOSE BUTTON ───────────────────────────────────────────────────────────── */
+.close-btn {
+  position: fixed;
+  top: 18px; right: 24px;
+  z-index: 60;
+  width: 38px; height: 38px;
+  display: grid;
+  place-items: center;
+  background: transparent;
+  border: 1px solid var(--ink);
+  font-family: var(--mono);
+  font-size: 16px;
+  cursor: pointer;
+  color: var(--ink);
+  transition: all 160ms ease;
+}
+.close-btn:hover {
+  background: var(--danger);
+  color: #fff;
+  border-color: var(--danger);
+  transform: rotate(90deg);
+}
+
+/* ─── APP HEADER ─────────────────────────────────────────────────────────────── */
+.app-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 24px;
+  padding: 16px 40px 13px;
+  background: var(--bg);
+  border-bottom: 1px solid var(--line);
+}
+
+/* Bookend — formas geométricas a la izquierda */
+.app-header .bookend {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.app-header .bookend .sq {
+  width: 14px; height: 14px;
+  background: var(--neon);
+  display: inline-block;
+  flex-shrink: 0;
+}
+.app-header .bookend .ci {
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  border: 1.5px solid var(--ink);
+  display: inline-block;
+  flex-shrink: 0;
+}
+.app-header .bookend .tri {
+  width: 0; height: 0;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-bottom: 14px solid var(--ink);
+  flex-shrink: 0;
+}
+
+/* Marca central */
+.app-header .brand {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+.app-header .brand b {
+  color: var(--ink);
+  font-weight: 700;
+  letter-spacing: 0.22em;
+}
+
+/* Meta a la derecha */
+.app-header .right-meta {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+/* ─── TYPOGRAPHY ─────────────────────────────────────────────────────────────── */
+h2.screen-title, h3.screen-title {
+  font-family: var(--serif);
+  font-style: var(--title-style);
+  font-weight: var(--title-weight);
+  text-transform: var(--title-transform);
+  letter-spacing: var(--title-tracking);
+  color: var(--ink);
+  margin-bottom: 14px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--line);
+}
+h2.screen-title { font-size: 1.5rem; margin-top: 0; }
+h3.screen-title { font-size: 1.1rem; margin-top: 20px; }
+
+.tagline {
+  font-family: var(--sans);
+  font-style: italic;
+  font-size: 1rem;
+  color: var(--ink-soft);
+  margin: 14px 0 6px;
+}
+
+.credit {
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  color: var(--ink-faint);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+}
+
+p { line-height: 1.55; font-size: 0.92rem; }
+
+/* ─── BUTTONS ────────────────────────────────────────────────────────────────── */
+button {
+  font-family: var(--mono);
+  font-size: 0.69rem;
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  padding: 12px 22px;
+  border: 1px solid var(--ink);
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+  transition: background 0.18s, color 0.18s, box-shadow 0.18s, transform 0.12s;
+  border-radius: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+button:hover:not(:disabled) { background: var(--ink); color: var(--bg); }
+
+button.primary {
+  background: var(--neon);
+  color: var(--ink);
+  border-color: var(--ink);
+  font-weight: 700;
+  box-shadow: 4px 4px 0 var(--ink);
+}
+button.primary:hover:not(:disabled) {
+  background: var(--neon-deep);
+  color: var(--ink);
+  transform: translateY(-2px);
+  box-shadow: 4px 6px 0 var(--ink);
+}
+button.primary:active:not(:disabled) {
+  transform: translate(2px,2px);
+  box-shadow: 0 0 0 var(--ink);
+}
+
+button:disabled {
+  opacity: 0.32;
+  cursor: not-allowed;
+}
+button.primary:disabled { background: transparent; box-shadow: 2px 2px 0 var(--line); }
+
+.actions {
+  margin-top: 16px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+/* ─── INPUTS ─────────────────────────────────────────────────────────────────── */
+label {
+  display: block;
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.20em;
+  color: var(--ink-soft);
+  margin-bottom: 8px;
+}
+
+input[type="text"], textarea, select {
+  font-family: var(--sans);
+  font-size: 1rem;
+  color: var(--ink);
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--ink);
+  border-radius: 0;
+  padding: 10px 0;
+  outline: none;
+  width: 100%;
+  transition: border-color 0.16s, background 0.16s;
+}
+input[type="text"]:focus,
+textarea:focus,
+select:focus {
+  border-bottom-color: var(--neon-deep);
+  background: linear-gradient(to top, var(--neon-shadow) 0%, transparent 30%);
+}
+input[type="text"]::placeholder,
+textarea::placeholder { color: var(--ink-faint); font-style: italic; }
+input[type="text"] { flex: 1; }
+
+select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23333'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 4px center;
+  background-size: 18px;
+  padding-right: 28px;
+  cursor: pointer;
+}
+
+.input-row {
+  display: flex;
+  gap: 12px;
+  align-items: flex-end;
+  margin-top: 6px;
+}
+.input-row input { flex: 1; width: auto; }
+
+/* ─── FEEDBACK & LABELS ──────────────────────────────────────────────────────── */
+.small {
+  font-family: var(--mono);
+  font-size: 0.69rem;
+  letter-spacing: 0.04em;
+  color: var(--ink-soft);
+  line-height: 1.5;
+}
+.feedback {
+  margin-top: 10px;
+  font-family: var(--mono);
+  font-size: 0.69rem;
+  letter-spacing: 0.04em;
+  min-height: 1.2em;
+}
+.feedback.error   { color: var(--danger); }
+.feedback.info    { color: var(--ink); }
+.feedback.success { color: var(--ink); }
+.feedback.success::before { content: "▲ "; color: var(--neon-deep); }
+
+/* ─── CONFIRM EXIT MODAL ─────────────────────────────────────────────────────── */
+.confirm-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(51, 51, 51, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9000;
+  padding: 24px;
+}
+.confirm-overlay[hidden] { display: none; }
+.confirm-dialog {
+  position: relative;
+  background: var(--paper);
+  border: 2px solid var(--ink);
+  box-shadow: 8px 8px 0 var(--ink);
+  padding: 36px 32px 28px;
+  max-width: 420px;
+  width: 100%;
+}
+.confirm-close {
+  position: absolute;
+  top: 12px; right: 14px;
+  background: none;
+  border: none;
+  font-size: 1.4rem;
+  line-height: 1;
+  cursor: pointer;
+  color: var(--ink-soft);
+  padding: 0 4px;
+}
+.confirm-close:hover { color: var(--ink); }
+.confirm-icon {
+  font-family: var(--serif);
+  font-weight: 800;
+  font-size: 2.8rem;
+  line-height: 1;
+  color: var(--neon);
+  -webkit-text-stroke: 1.5px var(--ink);
+  margin-bottom: 14px;
+}
+.confirm-title {
+  font-family: var(--serif);
+  font-weight: var(--title-weight);
+  font-size: 1.35rem;
+  text-transform: var(--title-transform);
+  letter-spacing: var(--title-tracking);
+  color: var(--ink);
+  margin-bottom: 10px;
+}
+.confirm-body {
+  font-family: var(--sans);
+  font-size: 0.88rem;
+  color: var(--ink-soft);
+  line-height: 1.55;
+  margin-bottom: 22px;
+}
+.confirm-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+/* ─── INSTRUCTION BOX ────────────────────────────────────────────────────────── */
+.instruction {
+  border-left: 3px solid var(--neon);
+  padding: 8px 14px;
+  margin-bottom: 16px;
+  color: var(--ink-soft);
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.03em;
+  line-height: 1.6;
+  background: transparent;
+}
+
+/* ─── GUIDANCE BOX ───────────────────────────────────────────────────────────── */
+.guidance {
+  margin-top: 14px;
+  padding: 10px 14px;
+  border: 1px solid var(--line);
+  background: rgba(255,255,255,0.2);
+  font-family: var(--mono);
+  font-size: 0.69rem;
+  letter-spacing: 0.03em;
+  color: var(--ink-soft);
+  line-height: 1.6;
+}
+
+/* ─── TEMP BADGE ─────────────────────────────────────────────────────────────── */
+.temp-badge {
+  display: inline-block;
+  margin-left: 10px;
+  padding: 4px 12px;
+  background: var(--neon);
+  color: var(--ink);
+  border: 1px solid var(--ink);
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.20em;
+  vertical-align: middle;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+.temp-badge.visible { opacity: 1; }
+
+/* ─── PHASE 1 — STAGE (3 COLS) ──────────────────────────────────────────────── */
+.phase1-stage {
+  display: grid;
+  grid-template-columns: 220px 1fr 220px;
+  gap: 20px;
+  align-items: start;
+  margin-top: 18px;
+}
+
+/* Columna de mazo (izquierda / derecha) */
+.deck-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+.deck-col-label {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  text-align: center;
+}
+
+/* Pila de cartas 3D */
+.deck-stack {
+  position: relative;
+  width: 200px;
+  height: 268px;
+  perspective: 900px;
+}
+.deck-stack::before,
+.deck-stack::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border: 1px solid rgba(51,51,51,0.50);
+  pointer-events: none;
+}
+.deck-stack::before { background: var(--bg-deep); transform: translate(5px,-4px) rotate(2.5deg); z-index: 0; }
+.deck-stack::after  { background: var(--bg);      transform: translate(3px,-2px) rotate(1.2deg); z-index: 1; }
+
+/* Carta con flip 3D */
+.card3d {
+  position: relative; z-index: 2;
+  width: 100%; height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 600ms cubic-bezier(.4,0,.2,1);
+}
+.card3d.flipped { transform: rotateY(180deg); }
+
+.card-face, .card-back {
+  position: absolute; inset: 0;
+  border: 1px solid var(--ink);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 20px;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+.card-face { background: var(--ink); }
+.card-face img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+.card-face-glyph {
+  font-family: var(--serif);
+  font-weight: 800;
+  font-size: 5rem;
+  line-height: 1;
+  color: var(--neon);
+}
+.card-face-sub {
+  font-family: var(--mono);
+  font-size: 8px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  margin-top: 10px;
+  color: var(--neon-deep);
+  text-align: center;
+}
+.card-back {
+  background: var(--ink);
+  transform: rotateY(180deg);
+  align-items: flex-start; justify-content: flex-start;
+  padding: 16px; overflow-y: auto;
+}
+.card-back-cat {
+  font-family: var(--mono);
+  font-size: 7px;
+  letter-spacing: 0.20em;
+  text-transform: uppercase;
+  color: var(--neon);
+  margin-bottom: 10px;
+  padding-bottom: 8px;
+  border-bottom: 0.5px solid rgba(223,255,0,0.3);
+  width: 100%;
+}
+.card-back-text {
+  font-family: var(--sans);
+  font-size: 0.85rem;
+  line-height: 1.55;
+  color: #fff;
+}
+
+/* ─── PHASE 1 — COLUMNA CENTRAL ─────────────────────────────────────────────── */
+.phase1-center {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* Barra de jugador activo */
+.phase1-player-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 16px;
+  border: 1px solid var(--ink);
+  background: var(--paper);
+  box-shadow: 4px 4px 0 var(--ink);
+}
+.phase1-player-bar .p-label {
+  font-family: var(--mono);
+  font-size: 8px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin-bottom: 3px;
+}
+.phase1-player-bar .p-name {
+  font-family: var(--serif);
+  font-weight: 800;
+  font-size: 1.15rem;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+
+/* Fila con timer y botón de acción */
+.timer-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.timer-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.timer-ring-svg {
+  width: 64px; height: 64px;
+  flex-shrink: 0;
+}
+.ring-bg { fill: none; stroke: var(--line); stroke-width: 5; }
+.ring-fg {
+  fill: none;
+  stroke: var(--neon-deep);
+  stroke-width: 5;
+  stroke-linecap: butt;
+  transform-origin: 50% 50%;
+  transform: rotate(-90deg);
+  transition: stroke-dashoffset 1s linear, stroke 0.5s;
+}
+.timer-ring-svg.warn .ring-fg { stroke: #F5A623; }
+.timer-ring-svg.crit .ring-fg { stroke: var(--danger); }
+.timer-label {
+  font-family: var(--mono);
+  font-size: 1.4rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--ink);
+  line-height: 1;
+}
+.timer-wrap.crit .timer-label { color: var(--danger); }
+
+/* ─── PHASE 1 — REVEALED (kept for Phase 2 .hallazgo-card.revealed) ─────────── */
+.revealed {
+  width: 100%;
+  min-height: 62px;
+  padding: 10px 12px;
+  border: 0.5px solid var(--line);
+  background: rgba(255,255,255,0.3);
+  font-family: var(--mono);
+  font-size: 0.82rem;
+  color: var(--text);
+  white-space: pre-line;
+  line-height: 1.55;
+}
+
+/* ─── PHASE 1 INPUTS ─────────────────────────────────────────────────────────── */
+.phase1-inputs { display: flex; flex-direction: column; gap: 4px; }
+.phase1-inputs textarea {
+  margin-top: 6px;
+  resize: vertical;
+  font-size: 0.95rem;
+  font-family: var(--sans);
+  line-height: 1.6;
+  border: 1px solid var(--ink);
+  padding: 12px 14px;
+  background: rgba(255,255,255,0.3);
+}
+
+.yesno-block {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  margin-top: 14px;
+  width: 100%;
+}
+
+.question-text {
+  font-family: var(--sans);
+  font-size: 0.95rem;
+  font-style: italic;
+  color: var(--ink);
+  line-height: 1.4;
+}
+
+.yesno-buttons { display: flex; gap: 12px; }
+.yesno-buttons button { padding: 12px 28px; letter-spacing: 0.30em; }
+.yesno-buttons button.active.yes {
+  background: var(--neon);
+  border-color: var(--ink);
+  font-weight: 700;
+  box-shadow: 4px 4px 0 var(--ink);
+}
+.yesno-buttons button.active.no {
+  background: var(--ink);
+  color: var(--neon);
+  font-weight: 700;
+  box-shadow: 4px 4px 0 var(--neon);
+}
+
+/* ─── PHASE 2 CARDS ──────────────────────────────────────────────────────────── */
+.hallazgos-wrap {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 14px;
+}
+
+.hallazgo-card {
+  width: calc(20% - 8px);
+  min-width: 96px;
+  border: 0.5px solid var(--line);
+  background: rgba(255,255,255,0.28);
+  padding: 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 84px;
+  transition: border-color 0.12s, background 0.12s;
+}
+.hallazgo-card:hover:not(.locked) {
+  background: rgba(223,255,0,0.18);
+  border-color: rgba(51,51,35,0.45);
+}
+
+.hallazgo-card.number-only {
+  font-family: var(--serif);
+  font-weight: var(--title-weight);
+  font-size: 1.5rem;
+  color: var(--neon);
+  background: var(--ink);
+}
+
+.hallazgo-card.revealed {
+  display: block;
+  align-items: flex-start;
+  justify-content: flex-start;
+  cursor: default;
+  height: auto;
+  min-height: 84px;
+  background: var(--ink);
+  border-color: rgba(223,255,0,0.3);
+}
+.hallazgo-card.revealed h4 {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--neon);
+  margin-bottom: 6px;
+  font-weight: 400;
+}
+.hallazgo-card.revealed p {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  color: #fff;
+  line-height: 1.4;
+  white-space: pre-wrap;
+}
+
+.hallazgo-card.locked {
+  opacity: 0.28;
+  cursor: default;
+  border: 0.5px dashed var(--line);
+  background: transparent;
+}
+
+/* ─── PHASE 2 — STAGE (3 COLS) ──────────────────────────────────────────────── */
+.phase2-stage {
+  display: grid;
+  grid-template-columns: 240px 1fr 240px;
+  gap: 24px;
+  align-items: start;
+  margin-top: 18px;
+}
+
+/* Contador de cartas en el mazo */
+.deck-count {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.20em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  text-align: center;
+  padding: 4px 10px;
+  border: 0.5px dashed var(--line);
+}
+
+/* ─── COUNTER-RING (setup — jugadores) ───────────────────────────────────────── */
+.counter-ring {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 22px;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+}
+.counter-dots {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  gap: 6px;
+  flex: 1;
+}
+.counter-dot {
+  height: 12px;
+  border: 1px solid var(--ink);
+  background: transparent;
+  transition: background 200ms ease;
+}
+.counter-dot.filled { background: var(--neon); }
+.counter-num {
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  color: var(--ink-soft);
+  white-space: nowrap;
+}
+.counter-num .counter-big {
+  font-size: 28px;
+  color: var(--ink);
+  font-weight: 700;
+  line-height: 1;
+}
+
+/* ─── PROGRESS-PIPS (phase 1 & 2) ────────────────────────────────────────────── */
+.phase1-progress {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  margin-top: 12px;
+}
+.phase2-progress {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  padding: 14px 0;
+  border-top: 1px solid var(--line);
+  margin-top: 16px;
+}
+.progress-pips {
+  display: flex;
+  gap: 3px;
+  flex-wrap: nowrap;
+  flex-shrink: 0;
+}
+.progress-pips .pip {
+  width: 18px; height: 6px;
+  background: transparent;
+  border: 1px solid var(--ink);
+  transition: background 200ms ease;
+  flex-shrink: 0;
+}
+.progress-pips .pip.done { background: var(--neon); }
+.progress-count {
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--ink);
+  letter-spacing: 0.08em;
+}
+
+/* Columna central de Fase 2 */
+.phase2-center {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-height: 300px;
+}
+.phase2-empty {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px dashed var(--line);
+  padding: 32px 20px;
+  color: var(--ink-faint);
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-align: center;
+  line-height: 1.6;
+}
+
+/* Hallazgo en evaluación */
+.phase2-finding-wrap {
+  border: 1px solid var(--ink);
+  background: var(--paper);
+  padding: 14px 16px;
+  box-shadow: 3px 3px 0 var(--ink);
+}
+.phase2-finding-meta {
+  font-family: var(--mono);
+  font-size: 7px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin-bottom: 6px;
+}
+.phase2-finding-text {
+  font-family: var(--sans);
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: var(--ink);
+}
+
+/* Pregunta WoQ ★ */
+.phase2-star-wrap {
+  border-left: 3px solid var(--neon);
+  padding: 10px 14px;
+  background: transparent;
+}
+.phase2-star-label {
+  font-family: var(--mono);
+  font-size: 7px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin-bottom: 6px;
+}
+.phase2-star-text {
+  font-family: var(--sans);
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: var(--ink);
+}
+.phase2-star-text em {
+  font-size: 0.82rem;
+  color: var(--ink-soft);
+}
+
+/* Lista de votantes */
+.voters-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.voters-list.two-col {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0 20px;
+}
+
+/* Fila de voto */
+.vote-switch-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 7px 0;
+  border-bottom: 0.5px dashed var(--line);
+}
+.vote-switch-row:last-child { border-bottom: none; }
+.vote-switch-row.yes { background: rgba(223, 255, 0, 0.18); }
+.vote-player-name {
+  font-family: var(--sans);
+  font-size: 0.92rem;
+  color: var(--ink);
+  flex: 1;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Toggle switch */
+.vote-toggle {
+  flex-shrink: 0;
+  cursor: pointer;
+  display: block;
+  position: relative;
+}
+.vote-toggle input[type="checkbox"] {
+  position: absolute;
+  opacity: 0;
+  width: 0; height: 0;
+  pointer-events: none;
+}
+.vote-track {
+  width: 88px; height: 30px;
+  border: 1px solid var(--ink);
+  position: relative;
+  display: flex;
+  overflow: hidden;
+  user-select: none;
+}
+.vote-half {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--mono);
+  font-size: 0.60rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  position: relative;
+  z-index: 1;
+  transition: color 200ms;
+}
+.vote-half.no { color: var(--paper); }
+.vote-half.si { color: var(--ink-soft); }
+.vote-thumb {
+  position: absolute;
+  top: 0; left: 0;
+  width: 50%; height: 100%;
+  background: var(--ink);
+  transition: left 200ms cubic-bezier(.4,0,.2,1), background 200ms;
+  z-index: 0;
+}
+/* Checked — thumb se mueve a "Sí" */
+.vote-toggle input:checked + .vote-track .vote-thumb {
+  left: 50%;
+  background: var(--neon);
+}
+.vote-toggle input:checked + .vote-track .vote-half.no { color: var(--ink-soft); }
+.vote-toggle input:checked + .vote-track .vote-half.si { color: var(--ink); }
+/* Disabled */
+.vote-toggle:has(input:disabled) { pointer-events: none; opacity: 0.45; }
+
+/* Contadores de votos */
+.phase2-counters {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+}
+
+.result-badge {
+  display: inline-block;
+  padding: 5px 12px;
+  background: var(--neon);
+  color: var(--ink);
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  border: 1px solid var(--ink);
+}
+.result-badge.no-badge {
+  background: var(--ink);
+  color: var(--neon);
+}
+
+/* ─── RESULTS — PÓDIUM ───────────────────────────────────────────────────────── */
+.results-org-line {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin-bottom: 28px;
+}
+
+/* Contenedor pódium */
+.podium-wrap {
+  margin: 0 0 40px;
+  display: flex;
+  justify-content: center;
+}
+.podium {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr 1fr;
+  align-items: end;
+  gap: 16px;
+  width: 100%;
+  max-width: 680px;
+}
+.podium.podium-tie-first {
+  grid-template-columns: 1fr 1fr 0.8fr;
+}
+/* Tarjeta de pódium */
+.podium-card {
+  border: 1px solid var(--ink);
+  padding: 20px 18px;
+  background: var(--paper);
+  position: relative;
+  text-align: center;
+}
+.podium-card .podium-label {
+  position: absolute;
+  top: -10px; left: 18px;
+  background: var(--bg);
+  padding: 0 6px;
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+.podium-card .podium-rank {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 64px;
+  line-height: 1;
+  font-weight: 800;
+  color: var(--ink);
+}
+.podium-card .podium-name {
+  font-family: var(--serif);
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: var(--title-tracking);
+  text-transform: var(--title-transform);
+  color: var(--ink);
+  margin-top: 8px;
+}
+.podium-card .podium-score {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  color: var(--ink-soft);
+  margin-top: 6px;
+}
+/* 1° — neon, elevado, sombra */
+.podium-card.podium-first {
+  background: var(--neon);
+  box-shadow: 6px 6px 0 var(--ink);
+  transform: translateY(-12px);
+}
+.podium-card.podium-first .podium-rank { font-size: 84px; }
+.podium-card.podium-first .podium-label { background: var(--neon); color: var(--ink); }
+.podium-card.podium-first .podium-score { color: var(--ink); }
+
+/* Nota VRIO */
+.vrio-note {
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.06em;
+  color: var(--ink-soft);
+  border-left: 3px solid var(--neon-deep);
+  padding: 8px 12px;
+  margin: 0 0 28px;
+  max-width: 680px;
+  line-height: 1.5;
+}
+
+/* ─── RESULTS — TABLAS FINALES ───────────────────────────────────────────────── */
+.final-report {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-top: 8px;
+  align-items: start;
+}
+.final-table {
+  border: 1px solid var(--line);
+  padding: 18px 20px;
+  background: rgba(255,255,255,0.25);
+}
+.final-table h3 {
+  font-family: var(--serif);
+  font-size: 1.05rem;
+  font-weight: var(--title-weight);
+  text-transform: var(--title-transform);
+  letter-spacing: var(--title-tracking);
+  color: var(--ink);
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+#winners-table-wrap h3::before {
+  content: '▲';
+  display: inline-grid;
+  place-items: center;
+  width: 24px; height: 24px;
+  background: var(--neon);
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  color: var(--ink);
+  flex-shrink: 0;
+}
+#qualifiers-table-wrap h3::before {
+  content: '◇';
+  display: inline-grid;
+  place-items: center;
+  width: 24px; height: 24px;
+  border: 1.5px solid var(--ink);
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  flex-shrink: 0;
+}
+.final-table table { width: 100%; border-collapse: collapse; }
+.final-table th {
+  font-family: var(--mono);
+  font-size: 0.60rem;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--ink-faint);
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--line);
+  font-weight: 400;
+  text-align: left;
+}
+.final-table td {
+  padding: 9px 10px;
+  border-bottom: 1px dashed var(--line);
+  font-family: var(--sans);
+  font-size: 0.85rem;
+  color: var(--ink);
+  line-height: 1.4;
+}
+.final-table tr:last-child td { border-bottom: none; }
+
+.print-actions { margin-top: 24px; }
+
+/* ─── PRINT ──────────────────────────────────────────────────────────────────── */
+@media print {
+  body::before, body::after { display: none !important; }
+  .app-header, .print-actions, #btn-back-to-home-2 { display: none !important; }
+  .app { max-width: 100%; padding: 20px; box-shadow: none; }
+  .screen { display: none !important; animation: none !important; }
+  #screen-results { display: block !important; }
+  .podium-card.podium-first { box-shadow: none; transform: none; }
+  .final-report { grid-template-columns: 1fr 1fr; }
+  .final-table { border: 1px solid #ccc; background: white; }
+}
+
+/* ─── HOME SCREEN ────────────────────────────────────────────────────────────── */
+#screen-home { overflow: hidden; }
+#screen-home .home-text {
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+#screen-home .actions { justify-content: center; }
+#btn-start-home {
+  padding: 18px 48px;
+  letter-spacing: 0.22em;
+  font-size: 0.72rem;
+}
+
+/* ─── CREDITS ────────────────────────────────────────────────────────────────── */
+.credits-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 32px;
+  margin-top: 20px;
+  align-items: start;
+}
+.credits-column { text-align: left; }
+.credits-column h4 {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.24em;
+  color: var(--ink-faint);
+  font-weight: 400;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.credits-column h4 .num {
+  background: var(--neon);
+  padding: 2px 6px;
+  color: var(--ink);
+  font-weight: 700;
+}
+.credits-column ul { list-style: none; padding: 0; margin: 0; }
+.credits-column li {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  padding: 7px 0;
+  border-bottom: 1px dashed var(--line);
+}
+.credits-column li a {
+  color: var(--ink);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.credits-column li a::after {
+  content: "→";
+  font-size: 11px;
+  width: 20px; height: 20px;
+  border: 1px solid var(--line);
+  display: inline-grid;
+  place-items: center;
+  flex-shrink: 0;
+  transition: background 0.16s;
+}
+.credits-column li a:hover::after { background: var(--neon); }
+
+/* ─── ATTRIBUTION ────────────────────────────────────────────────────────────── */
+.attribution {
+  margin-top: 20px;
+  padding: 12px 16px;
+  border: 1px dashed var(--line);
+  background: rgba(255,255,255,0.2);
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.04em;
+  color: var(--ink-faint);
+  line-height: 1.65;
+}
+
+/* ─── PLAYERS SCREEN ─────────────────────────────────────────────────────────── */
+.setup {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 56px;
+  align-items: start;
+}
+.setup-section { position: relative; padding-top: 4px; }
+.setup-col-header {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin: 0 0 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.setup-col-header .num {
+  background: var(--ink);
+  color: var(--neon);
+  padding: 2px 7px;
+  font-weight: 700;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+}
+.setup-field { margin-bottom: 20px; }
+.setup-field label {
+  display: block;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.20em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  margin-bottom: 8px;
+}
+.setup-field label .req { color: var(--danger); margin-left: 3px; }
+.setup-note {
+  margin-top: 28px;
+  padding: 14px 16px;
+  border: 1px dashed var(--line);
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  color: var(--ink-faint);
+  text-transform: uppercase;
+  line-height: 1.6;
+}
+.setup-note .note-tag {
+  background: var(--neon);
+  color: var(--ink);
+  font-weight: 700;
+  padding: 1px 6px;
+  margin-right: 8px;
+  letter-spacing: 0.08em;
+}
+.setup-actions {
+  grid-column: 1 / -1;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  padding-top: 24px;
+  border-top: 1px solid var(--line);
+  margin-top: 8px;
+}
+
+.players-list { margin-top: 16px; }
+.players-list h3 {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  color: var(--ink-faint);
+  font-weight: 400;
+  margin-bottom: 12px;
+}
+#players-ul { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(2,1fr); gap: 10px; }
+#players-ul li {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 14px;
+  border: 1px solid var(--ink);
+  background: var(--paper);
+  box-shadow: 3px 3px 0 var(--ink);
+  font-family: var(--sans);
+  font-size: 0.95rem;
+  font-weight: 500;
+  animation: chipIn 280ms cubic-bezier(.2,.7,.2,1);
+}
+@keyframes chipIn {
+  from { opacity:0; transform:translate(-6px,-6px); }
+  to   { opacity:1; transform:translate(0,0); }
+}
+#players-ul li::before {
+  content: attr(data-idx);
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.16em;
+  color: var(--ink-faint);
+  width: 22px;
+}
+#players-ul li button {
+  width: 22px; height: 22px;
+  border: 1px solid var(--line);
+  background: transparent;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--ink-soft);
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  box-shadow: none;
+  letter-spacing: 0;
+}
+#players-ul li button:hover:not(:disabled) {
+  background: var(--danger);
+  color: #fff;
+  border-color: var(--danger);
+}
+
+.conditional { display: none; }
+
+/* ─── HOME — LAYOUT ──────────────────────────────────────────────────────────── */
+.home-grid {
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  gap: 56px;
+  align-items: start;
+}
+
+/* Hero — columna izquierda */
+.home-hero {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 8px 0 4px;
+}
+.home-fig {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin-bottom: 16px;
+}
+.home-title {
+  font-family: var(--serif);
+  font-weight: var(--title-weight);
+  font-size: clamp(64px, 10vw, 148px);
+  line-height: 0.88;
+  letter-spacing: var(--title-tracking);
+  text-transform: var(--title-transform);
+  margin: 0 0 20px;
+  color: var(--ink);
+}
+.home-title .ampersand {
+  font-style: normal;
+  font-weight: 400;
+  position: relative;
+  display: inline-block;
+  padding: 0 8px;
+}
+.home-title .ampersand::after {
+  content: "";
+  position: absolute;
+  width: 0.7em;
+  height: 0.7em;
+  background: var(--neon);
+  border-radius: 50%;
+  top: 0.05em;
+  left: 0.12em;
+  z-index: -1;
+}
+.home-tagline {
+  font-family: var(--sans);
+  font-style: italic;
+  font-size: 1rem;
+  line-height: 1.45;
+  max-width: 42ch;
+  color: var(--ink-soft);
+  margin: 0 0 32px;
+}
+.home-cta {
+  margin: 0 0 32px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+.home-credit {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.20em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  border-top: 1px solid var(--line);
+  padding-top: 12px;
+  max-width: 44ch;
+}
+
+/* Collage — columna derecha (scope/radar) */
+.home-collage {
+  position: relative;
+  border: 1px solid var(--line);
+  background: var(--paper);
+  overflow: hidden;
+  aspect-ratio: 4 / 5;
+}
+
+/* Scope base */
+.scope {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 50% 50%, transparent 45%, rgba(0,0,0,0.30) 72%, rgba(0,0,0,0.55) 100%),
+    linear-gradient(to right,  rgba(255,255,255,0.06) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255,255,255,0.06) 1px, transparent 1px),
+    url('img/Radar.png');
+  background-size: auto, 24px 24px, 24px 24px, cover;
+  background-position: center;
+}
+
+/* SVG con anillos y marcas */
+.scope-svg {
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 92%; height: 92%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+}
+
+/* ─── RADAR SWEEP ─────────────────────────────────────────────────────────────── */
+.radar-sweep {
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 73.6%;
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  z-index: 2;
+  pointer-events: none;
+  background: conic-gradient(
+    from -8deg,
+    transparent 0deg,
+    transparent 220deg,
+    rgba(223,255,0,0.02) 240deg,
+    rgba(223,255,0,0.06) 280deg,
+    rgba(223,255,0,0.14) 330deg,
+    rgba(223,255,0,0.32) 355deg,
+    rgba(223,255,0,0.50) 360deg
+  );
+  animation: radarSpin 4.95s linear infinite;
+  -webkit-mask: radial-gradient(circle at 50% 50%, transparent 0%, black 12%, black 100%);
+          mask: radial-gradient(circle at 50% 50%, transparent 0%, black 12%, black 100%);
+}
+@keyframes radarSpin {
+  to { transform: translate(-50%,-50%) rotate(360deg); }
+}
+
+/* ─── BLIPS ───────────────────────────────────────────────────────────────────── */
+.blips {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+}
+.blip {
+  position: absolute;
+  width: 9px; height: 9px;
+  border-radius: 50%;
+  background: var(--neon);
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  animation: blipPing 4.95s linear infinite;
+  box-shadow: 0 0 0 0 rgba(223,255,0,0.6);
+}
+.blip.sm { width: 6px; height: 6px; }
+.blip.lg { width: 13px; height: 13px; }
+@keyframes blipPing {
+  /* El barrido acaba de pasar — destello de fósforo */
+  0%   { opacity:1;    transform:translate(-50%,-50%) scale(1.35); box-shadow:0 0 0 0   rgba(223,255,0,0.9); }
+  4%   { opacity:0.95; transform:translate(-50%,-50%) scale(1);    box-shadow:0 0 0 10px rgba(223,255,0,0); }
+  /* Decaimiento de fósforo */
+  22%  { opacity:0.65; }
+  50%  { opacity:0.28; }
+  80%  { opacity:0.06; }
+  /* Oscuro justo antes de la próxima pasada */
+  95%  { opacity:0;    transform:translate(-50%,-50%) scale(0.92); }
+  100% { opacity:0;    transform:translate(-50%,-50%) scale(0.92); }
+}
+
+/* ─── TELEMETRÍA (esquinas del scope) ────────────────────────────────────────── */
+.tele {
+  position: absolute;
+  z-index: 3;
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.06em;
+  line-height: 1.4;
+  padding: 8px 10px;
+  width: 116px;
+  background: rgba(10,10,8,0.72);
+  backdrop-filter: blur(2px);
+}
+.tele.tl { top:0;    left:0;    border-right:0.5px solid rgba(255,255,255,0.12); border-bottom:0.5px solid rgba(255,255,255,0.12); }
+.tele.tr { top:0;    right:0;   border-left:0.5px solid rgba(255,255,255,0.12);  border-bottom:0.5px solid rgba(255,255,255,0.12); text-align:right; }
+.tele.bl { bottom:0; left:0;    border-right:0.5px solid rgba(255,255,255,0.12); border-top:0.5px solid rgba(255,255,255,0.12); }
+.tele.br { bottom:0; right:0;   border-left:0.5px solid rgba(255,255,255,0.12);  border-top:0.5px solid rgba(255,255,255,0.12);  text-align:right; }
+.tele-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  border-bottom: 0.5px dashed rgba(255,255,255,0.10);
+  padding: 2px 0;
+}
+.tele-row:last-child { border-bottom: none; }
+.tele.tr .tele-row,
+.tele.br .tele-row { flex-direction: row-reverse; }
+.tele-row .k { color: rgba(255,255,255,0.42); text-transform: uppercase; font-size: 8px; letter-spacing: 0.12em; }
+.tele-row .v { color: rgba(255,255,255,0.90); font-weight: 700; letter-spacing: 0.04em; white-space: nowrap; }
+.tele-row .v.lock { background: var(--neon); color: var(--ink); padding: 0 4px; }
+
+/* Etiquetas cardinales */
+.card-lbl {
+  position: absolute;
+  z-index: 3;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  font-weight: 700;
+  color: var(--ink);
+  background: var(--paper);
+  padding: 2px 4px;
+}
+.card-lbl.n { top:8px;    left:50%; transform:translateX(-50%); }
+.card-lbl.s { bottom:8px; left:50%; transform:translateX(-50%); }
+.card-lbl.e { right:4px;  top:50%;  transform:translateY(-50%); }
+.card-lbl.w { left:4px;   top:50%;  transform:translateY(-50%); }
+
+/* ─── HOME — META (créditos debajo del grid) ─────────────────────────────────── */
+.home-meta {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr 1fr;
+  gap: 40px;
+  padding-top: 40px;
+  margin-top: 40px;
+  border-top: 1px solid var(--line);
+}
+
+/* ─── RESPONSIVE ─────────────────────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  .hallazgo-card { width: calc(33.333% - 8px); }
+  .final-table   { width: 100%; }
+  .phase1-stage  { grid-template-columns: 1fr; }
+  .deck-col      { flex-direction: row; align-items: flex-start; gap: 16px; }
+  .deck-stack    { width: 140px; height: 196px; }
+}
+@media (max-width: 640px) {
+  .app           { padding: 20px 18px 32px; }
+  .setup         { grid-template-columns: 1fr; gap: 28px; }
+  .home-grid     { grid-template-columns: 1fr; }
+  .hallazgo-card { width: calc(50% - 8px); }
+  .credits-grid  { grid-template-columns: 1fr; }
+  .home-meta     { grid-template-columns: 1fr; }
+  .phase1-stage  {
+    gap: 12px;
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+      "questions features"
+      "center    center";
+  }
+  .phase1-center  { grid-area: center; }
+  #deck-questions { grid-area: questions; }
+  #deck-features  { grid-area: features; }
+  .phase2-stage  {
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+      "findings star"
+      "center   center";
+  }
+  .phase2-center  { grid-area: center; }
+  #deck-findings  { grid-area: findings; }
+  #deck-star      { grid-area: star; }
+  .deck-col       { flex-direction: column; align-items: center; }
+  .deck-stack     { width: 120px; height: 168px; }
+}
+  </style>
+</head>
+<body>
+  <header class="app-header">
+    <div class="bookend">
+      <span class="sq"></span>
+      <span class="ci"></span>
+      <span class="tri"></span>
+    </div>
+    <div class="brand">
+      <b>Winners &amp; Qualifiers</b>
+      <span>  ·  Architectura de Estrategia Organizacional</span>
+    </div>
+    <div class="right-meta">
+      <span id="header-screen-label">Inicio</span>
+      <span>EAFIT · MMXXV</span>
+    </div>
+  </header>
+
+  <main class="app" role="main">
+
+    <!-- ─── HOME ───────────────────────────────────────────────────────────── -->
+    <section id="screen-home" class="screen visible" aria-label="Inicio">
+
+      <!-- Dos columnas: héroe + scope -->
+      <div class="home-grid">
+
+        <!-- Columna izquierda: héroe -->
+        <div class="home-hero">
+          <div>
+            <div class="home-fig">FIG.01 — Campo Estratégico</div>
+            <h1 class="home-title">
+              Winners<br>
+              <span class="ampersand">&amp;</span><br>
+              <span class="q">Qualifiers</span>
+            </h1>
+            <p class="home-tagline">El juego que revela los recursos y capacidades tácitas con potencial estratégico de tu organización.</p>
+            <div class="home-cta">
+              <button id="btn-start-home" class="primary" type="button" aria-label="Empezar">Empezar</button>
+            </div>
+          </div>
+          <div class="home-credit">
+            Semillero de investigación en Estrategia Organizacional · Universidad EAFIT, 2025
+          </div>
+        </div>
+
+        <!-- Columna derecha: radar / sonar scope -->
+        <div class="home-collage" aria-hidden="true">
+          <div class="scope">
+            <svg class="scope-svg" viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <!-- Anillos concéntricos -->
+              <circle cx="200" cy="200" r="170" stroke="rgba(255,255,255,0.22)" stroke-width="0.5"/>
+              <circle cx="200" cy="200" r="130" stroke="rgba(255,255,255,0.18)" stroke-width="0.5"/>
+              <circle cx="200" cy="200" r="90"  stroke="rgba(255,255,255,0.14)" stroke-width="0.5"/>
+              <circle cx="200" cy="200" r="50"  stroke="rgba(255,255,255,0.10)" stroke-width="0.5"/>
+              <!-- Cruceta -->
+              <line x1="0"   y1="200" x2="400" y2="200" stroke="rgba(255,255,255,0.18)" stroke-width="0.5"/>
+              <line x1="200" y1="0"   x2="200" y2="400" stroke="rgba(255,255,255,0.18)" stroke-width="0.5"/>
+              <!-- Marcas cardinales mayores (N/E/S/W) -->
+              <line x1="200" y1="30"  x2="200" y2="42"  stroke="rgba(255,255,255,0.60)" stroke-width="1.5"/>
+              <line x1="370" y1="200" x2="358" y2="200" stroke="rgba(255,255,255,0.60)" stroke-width="1.5"/>
+              <line x1="200" y1="370" x2="200" y2="358" stroke="rgba(255,255,255,0.60)" stroke-width="1.5"/>
+              <line x1="30"  y1="200" x2="42"  y2="200" stroke="rgba(255,255,255,0.60)" stroke-width="1.5"/>
+              <!-- Marcas menores cada 10° (sin cardinales) -->
+              <line x1="367" y1="230" x2="361" y2="228" stroke="rgba(255,255,255,0.28)" stroke-width="0.5"/>
+              <line x1="360" y1="258" x2="354" y2="256" stroke="rgba(255,255,255,0.28)" stroke-width="0.5"/>
+              <line x1="347" y1="285" x2="341" y2="282" stroke="rgba(255,255,255,0.28)" stroke-width="0.5"/>
+              <line x1="330" y1="309" x2="325" y2="305" stroke="rgba(255,255,255,0.28)" stroke-width="0.5"/>
+              <line x1="309" y1="330" x2="305" y2="325" stroke="rgba(255,255,255,0.28)" stroke-width="0.5"/>
+              <line x1="285" y1="347" x2="282" y2="341" stroke="rgba(255,255,255,0.28)" stroke-width="0.5"/>
+              <line x1="258" y1="360" x2="256" y2="354" stroke="rgba(255,255,255,0.28)" stroke-width="0.5"/>
+              <line x1="230" y1="367" x2="228" y2="361" stroke="rgba(255,255,255,0.28)" stroke-width="0.5"/>
+              <line x1="170" y1="367" x2="172" y2="361" stroke="rgba(255,255,255,0.28)" stroke-width="0.5"/>
+              <line x1="142" y1="360" x2="144" y2="354" stroke="rgba(255,255,255,0.28)" stroke-width="0.5"/>
+              <line x1="115" y1="347" x2="118" y2="341" stroke="rgba(255,255,255,0.28)" stroke-width="0.5"/>
+              <line x1="91"  y1="330" x2="95"  y2="325" stroke="rgba(255,255,255,0.28)" stroke-width="0.5"/>
+              <line x1="70"  y1="309" x2="75"  y2="305" stroke="rgba(255,255,255,0.28)" stroke-width="0.5"/>
+              <line x1="53"  y1="285" x2="59"  y2="282" stroke="rgba(255,255,255,0.28)" stroke-width="0.5"/>
+              <line x1="40"  y1="258" x2="46"  y2="256" stroke="rgba(255,255,255,0.28)" stroke-width="0.5"/>
+              <line x1="33"  y1="230" x2="39"  y2="228" stroke="rgba(255,255,255,0.28)" stroke-width="0.5"/>
+              <line x1="33"  y1="170" x2="39"  y2="172" stroke="rgba(255,255,255,0.28)" stroke-width="0.5"/>
+              <line x1="40"  y1="142" x2="46"  y2="144" stroke="rgba(255,255,255,0.28)" stroke-width="0.5"/>
+              <line x1="53"  y1="115" x2="59"  y2="118" stroke="rgba(255,255,255,0.28)" stroke-width="0.5"/>
+              <line x1="70"  y1="91"  x2="75"  y2="95"  stroke="rgba(255,255,255,0.28)" stroke-width="0.5"/>
+              <line x1="91"  y1="70"  x2="95"  y2="75"  stroke="rgba(255,255,255,0.28)" stroke-width="0.5"/>
+              <line x1="115" y1="53"  x2="118" y2="59"  stroke="rgba(255,255,255,0.28)" stroke-width="0.5"/>
+              <line x1="142" y1="40"  x2="144" y2="46"  stroke="rgba(255,255,255,0.28)" stroke-width="0.5"/>
+              <line x1="170" y1="33"  x2="172" y2="39"  stroke="rgba(255,255,255,0.28)" stroke-width="0.5"/>
+              <line x1="230" y1="33"  x2="228" y2="39"  stroke="rgba(255,255,255,0.28)" stroke-width="0.5"/>
+              <line x1="258" y1="40"  x2="256" y2="46"  stroke="rgba(255,255,255,0.28)" stroke-width="0.5"/>
+              <line x1="285" y1="53"  x2="282" y2="59"  stroke="rgba(255,255,255,0.28)" stroke-width="0.5"/>
+              <line x1="309" y1="70"  x2="305" y2="75"  stroke="rgba(255,255,255,0.28)" stroke-width="0.5"/>
+              <line x1="330" y1="91"  x2="325" y2="95"  stroke="rgba(255,255,255,0.28)" stroke-width="0.5"/>
+              <line x1="347" y1="115" x2="341" y2="118" stroke="rgba(255,255,255,0.28)" stroke-width="0.5"/>
+              <line x1="360" y1="142" x2="354" y2="144" stroke="rgba(255,255,255,0.28)" stroke-width="0.5"/>
+              <line x1="367" y1="170" x2="361" y2="172" stroke="rgba(255,255,255,0.28)" stroke-width="0.5"/>
+            </svg>
+            <!-- Barrido de radar -->
+            <div class="radar-sweep"></div>
+            <!-- Contactos / blips -->
+            <div class="blips">
+              <div class="blip"    style="left:62%;top:28%;animation-delay:0.40s;"></div>
+              <div class="blip lg" style="left:38%;top:55%;animation-delay:3.40s;"></div>
+              <div class="blip sm" style="left:72%;top:61%;animation-delay:1.61s;"></div>
+              <div class="blip"    style="left:24%;top:35%;animation-delay:4.13s;"></div>
+              <div class="blip sm" style="left:55%;top:72%;animation-delay:2.30s;"></div>
+              <div class="blip lg" style="left:46%;top:42%;animation-delay:4.59s;"></div>
+            </div>
+          </div>
+          <!-- Telemetría en esquinas -->
+          <div class="tele tl">
+            <div class="tele-row"><span class="k">Range</span><span class="v">3.2 km</span></div>
+            <div class="tele-row"><span class="k">Depth</span><span class="v">−120 m</span></div>
+            <div class="tele-row"><span class="k">Azimuth</span><span class="v">274°</span></div>
+          </div>
+          <div class="tele tr">
+            <div class="tele-row"><span class="v lock">LOCK</span><span class="k">Mode</span></div>
+            <div class="tele-row"><span class="v">0.86</span><span class="k">Quality</span></div>
+            <div class="tele-row"><span class="v">Active</span><span class="k">Status</span></div>
+          </div>
+          <div class="tele bl">
+            <div class="tele-row"><span class="k">Speed</span><span class="v">12 kn</span></div>
+            <div class="tele-row"><span class="k">Bearing</span><span class="v">N 34° W</span></div>
+          </div>
+          <div class="tele br">
+            <div class="tele-row"><span class="v">94%</span><span class="k">Power</span></div>
+            <div class="tele-row"><span class="v">6</span><span class="k">Contacts</span></div>
+          </div>
+          <!-- Puntos cardinales -->
+          <span class="card-lbl n">N</span>
+          <span class="card-lbl s">S</span>
+          <span class="card-lbl e">E</span>
+          <span class="card-lbl w">W</span>
+        </div><!-- /.home-collage -->
+
+      </div><!-- /.home-grid -->
+
+      <!-- Créditos + Atribución (ancho completo) -->
+      <div class="home-meta" role="contentinfo">
+        <div>
+          <p style="font-size:0.88rem;line-height:1.6;color:var(--ink-soft);max-width:46ch;">
+            Winners &amp; Qualifiers ayuda a los equipos a identificar recursos y capacidades tácitas con potencial estratégico a través de exploración colectiva y votación democrática.
+          </p>
+        </div>
+        <div class="credits-column" aria-labelledby="estudiantes-head">
+          <h4 id="estudiantes-head"><span class="num">01</span> Developer</h4>
+          <ul>
+            <li><a href="https://www.linkedin.com/in/paulmoscosov" target="_blank" rel="noopener noreferrer">Paul Moscoso V.</a></li>
+          </ul>
+        </div>
+        <div class="credits-column" aria-labelledby="profesores-head">
+          <h4 id="profesores-head"><span class="num">02</span> Leading Professors</h4>
+          <ul>
+            <li><a href="https://www.linkedin.com/in/martha-eugenia-reyes-sarmiento-194b9099/" target="_blank" rel="noopener noreferrer">Martha Reyes Sarmiento</a></li>
+            <li><a href="https://www.linkedin.com/in/jmaciasp/" target="_blank" rel="noopener noreferrer">John Macías</a></li>
+            <li><a href="https://www.eafit.edu.co/nuestros-profesores/jorge-ivan-velez-castiblanco" target="_blank" rel="noopener noreferrer">Jorge Iván Vélez Castiblanco</a></li>
+          </ul>
+        </div>
+      </div><!-- /.home-meta -->
+
+      <div class="attribution" role="note" style="margin-top:24px;">
+        Aviso de atribución: El uso, modificación o redistribución de esta herramienta requiere la debida atribución al equipo y a la Universidad EAFIT. Cita mínima recomendada: "Semillero de investigación en estrategia, Universidad EAFIT (2025)."
+      </div>
+
+    </section>
+
+    <!-- ─── PLAYERS ─────────────────────────────────────────────────────────── -->
+    <section id="screen-players" class="screen" aria-labelledby="players-title">
+      <h2 id="players-title" class="screen-title">Ingresar datos de partida</h2>
+
+      <div class="setup">
+
+        <!-- Columna izquierda — Organización -->
+        <div class="setup-section">
+          <h3 class="setup-col-header"><span class="num">A</span> Organización</h3>
+
+          <div class="setup-field">
+            <label for="org-name">Nombre de la organización <span class="req" aria-hidden="true">*</span></label>
+            <input id="org-name" name="org-name" type="text" placeholder="Ej. Café Cumbre S.A.S." autocomplete="organization" />
+          </div>
+
+          <div class="setup-field">
+            <label for="org-type">Tipo de organización <span class="req" aria-hidden="true">*</span></label>
+            <select id="org-type" name="org-type" aria-required="true">
+              <option value="">— Selecciona —</option>
+              <option value="Empresa familiar">Empresa familiar</option>
+              <option value="Emprendimiento">Emprendimiento</option>
+              <option value="Mipyme">Mipyme</option>
+              <option value="Empresa consolidada">Empresa consolidada</option>
+              <option value="Otra">Otra</option>
+            </select>
+          </div>
+
+          <div id="org-type-other-wrap" class="setup-field conditional">
+            <label for="org-type-other">Especifica el tipo <span class="req" aria-hidden="true">*</span></label>
+            <input id="org-type-other" name="org-type-other" type="text" placeholder="Ej. Cooperativa, ONG, Fundación…" />
+          </div>
+
+          <div class="setup-note">
+            <span class="note-tag">Nota</span>Los datos no se transmiten ni almacenan. Solo se utilizan para el ranking final.
+          </div>
+        </div>
+
+        <!-- Columna derecha — Jugadores -->
+        <div class="setup-section">
+          <h3 class="setup-col-header"><span class="num">B</span> Jugadores</h3>
+
+          <div class="setup-field">
+            <label for="player-name">Nombre del jugador</label>
+            <div class="input-row">
+              <input id="player-name" name="player-name" type="text" placeholder="Ej. María" autocomplete="off" />
+              <button id="btn-add-player" type="button">Agregar</button>
+            </div>
+          </div>
+
+          <div class="players-list">
+            <ul id="players-ul" aria-live="polite"></ul>
+            <p id="players-note" class="small" style="margin-top:10px;">Se requieren entre 3 y 10 jugadores. Complete los datos de partida arriba.</p>
+            <p id="player-feedback" class="feedback" role="status" aria-live="polite"></p>
+            <div class="counter-ring" id="players-counter-ring">
+              <div class="counter-num"><span class="counter-big" id="players-counter-big">0</span> / 10</div>
+              <div class="counter-dots" id="players-counter-dots">
+                <div class="counter-dot"></div><div class="counter-dot"></div><div class="counter-dot"></div>
+                <div class="counter-dot"></div><div class="counter-dot"></div><div class="counter-dot"></div>
+                <div class="counter-dot"></div><div class="counter-dot"></div><div class="counter-dot"></div>
+                <div class="counter-dot"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Acciones — ocupa ambas columnas -->
+        <div class="setup-actions">
+          <button id="btn-back" type="button">Volver</button>
+          <button id="btn-start-game" class="primary" type="button" disabled>Comenzar juego</button>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ─── PHASE 1 ──────────────────────────────────────────────────────────── -->
+    <section id="screen-phase1" class="screen" aria-labelledby="phase1-title">
+      <h2 id="phase1-title" class="screen-title">Fase de exploración</h2>
+
+      <p class="instruction">
+        Pulsa <strong>Seleccionar cartas</strong> para revelar una Pregunta y una Característica; el temporizador arrancará.
+        Redacta tu hallazgo, responde Sí/No y pulsa <strong>Siguiente turno</strong> para finalizar el turno.
+      </p>
+      <div class="guidance">
+        Recurso — empieza por un <strong>sustantivo</strong> &nbsp;·&nbsp;
+        Capacidad — empieza por un <strong>verbo en infinitivo</strong>
+      </div>
+
+      <!-- Tres columnas: mazo preguntas | centro | mazo características -->
+      <div class="phase1-stage">
+
+        <!-- Izquierda — mazo de preguntas -->
+        <div class="deck-col" id="deck-questions">
+          <div class="deck-col-label">Preguntas</div>
+          <div class="deck-stack">
+            <div class="card3d" id="card3d-question">
+              <div class="card-face">
+                <img src="img/Pregunta.png" alt="Mazo de Preguntas" draggable="false">
+              </div>
+              <div class="card-back">
+                <div class="card-back-cat" id="card-back-question-cat"></div>
+                <div class="card-back-text" id="card-back-question-text"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Centro — jugador, timer, notebook -->
+        <div class="phase1-center">
+
+          <!-- Chip de jugador activo -->
+          <div class="phase1-player-bar">
+            <div>
+              <div class="p-label">Turno actual</div>
+              <div class="p-name" id="current-player-name">—</div>
+            </div>
+            <span id="tipo-detected" class="temp-badge" aria-live="polite"></span>
+          </div>
+
+          <!-- Timer + botón seleccionar -->
+          <div class="timer-row">
+            <div class="timer-wrap" id="timer-wrap">
+              <svg class="timer-ring-svg" id="timer-ring-svg" viewBox="0 0 100 100" aria-hidden="true">
+                <circle class="ring-bg" cx="50" cy="50" r="44"/>
+                <circle class="ring-fg" id="ring-fg" cx="50" cy="50" r="44"
+                  stroke-dasharray="276.46"
+                  stroke-dashoffset="276.46"/>
+              </svg>
+              <div class="timer-label" id="timer-display">05:00</div>
+            </div>
+            <button id="btn-select-cards" class="primary" type="button">Seleccionar cartas</button>
+          </div>
+
+          <!-- Notebook: hallazgo + pregunta sí/no + acciones -->
+          <div class="phase1-inputs">
+            <label for="finding-text">Redacta tu hallazgo</label>
+            <textarea id="finding-text" placeholder="Describe un recurso o una capacidad…" rows="5" disabled></textarea>
+
+            <div class="yesno-block" aria-live="polite" style="margin-top:12px;">
+              <div class="question-text" id="question-text">Pregunta: —</div>
+              <div class="yesno-buttons">
+                <button id="btn-answer-yes" class="yes" type="button" disabled aria-label="Responder Sí">Sí</button>
+                <button id="btn-answer-no"  class="no"  type="button" disabled aria-label="Responder No">No</button>
+              </div>
+            </div>
+
+            <div class="actions" style="margin-top:14px; flex-wrap:wrap;">
+              <button id="btn-next-turn" class="primary" type="button" disabled>Siguiente turno</button>
+              <button id="btn-go-phase2" type="button" disabled>Ir a Fase 2</button>
+            </div>
+            <div class="phase1-progress" id="phase1-finding-count">
+              <span>Hallazgos</span>
+              <div class="progress-pips" id="phase1-pips">
+                <span class="pip"></span><span class="pip"></span><span class="pip"></span><span class="pip"></span><span class="pip"></span>
+                <span class="pip"></span><span class="pip"></span><span class="pip"></span><span class="pip"></span><span class="pip"></span>
+              </div>
+              <span class="progress-count" id="phase1-count-label">0/10</span>
+            </div>
+          </div>
+
+        </div><!-- /.phase1-center -->
+
+        <!-- Derecha — mazo de características -->
+        <div class="deck-col" id="deck-features">
+          <div class="deck-col-label">Características</div>
+          <div class="deck-stack">
+            <div class="card3d" id="card3d-feature">
+              <div class="card-face">
+                <img src="img/Caracteristica.png" alt="Mazo de Características" draggable="false">
+              </div>
+              <div class="card-back">
+                <div class="card-back-cat" id="card-back-feature-cat"></div>
+                <div class="card-back-text" id="card-back-feature-text"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /.phase1-stage -->
+
+      <div style="margin-top:24px;">
+        <button id="btn-back-to-home-p1" type="button">Volver al inicio</button>
+      </div>
+
+      <!-- Tabla oculta para exportación/debug -->
+      <div class="phase1-table-wrap" aria-hidden="true" style="display:none;">
+        <table id="phase1-table">
+          <thead><tr><th>Jugador</th><th>Hallazgo</th><th>Tipo</th><th>Respuesta F1</th><th>Pregunta F1</th><th>Característica</th><th>Puntaje F1</th><th>Clasificación F2</th><th>Puntaje F2</th><th>Puntaje Final</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ─── PHASE 2 ──────────────────────────────────────────────────────────── -->
+    <section id="screen-phase2" class="screen" aria-labelledby="phase2-title">
+      <h2 id="phase2-title" class="screen-title">Fase de clasificación</h2>
+      <p class="instruction">Extraed un hallazgo, luego una carta ★ para votar colectivamente si es Winner. En empate, el Sí prevalece.</p>
+
+      <div class="phase2-stage">
+
+        <!-- Izquierda — mazo de hallazgos (submarino) -->
+        <div class="deck-col" id="deck-findings">
+          <div class="deck-col-label"><br>Hallazgos</div>
+          <div class="deck-stack">
+            <div class="card3d" id="card3d-finding">
+              <!-- Cara cerrada: icono submarino -->
+              <div class="card-face">
+                <img src="img/Submarine.png" alt="Hallazgo pendiente" draggable="false">
+              </div>
+              <!-- Cara revelada: texto del hallazgo -->
+              <div class="card-back">
+                <div class="card-back-cat" id="card-back-finding-player"></div>
+                <div class="card-back-text" id="card-back-finding-text"></div>
+              </div>
+            </div>
+          </div>
+          <button id="btn-extract-finding" class="primary" type="button" disabled>Extraer hallazgo</button>
+        </div>
+
+        <!-- Centro — votación colectiva -->
+        <div class="phase2-center" id="phase2-center">
+
+          <!-- Hallazgo en evaluación -->
+          <div class="phase2-finding-wrap" id="phase2-finding-info" style="display:none;">
+            <div class="phase2-finding-meta" id="phase2-finding-type"></div>
+            <div class="phase2-finding-text" id="phase2-finding-display"></div>
+          </div>
+
+          <!-- Pregunta WoQ ★ -->
+          <div class="phase2-star-wrap" id="phase2-star-wrap" style="display:none;">
+            <div class="phase2-star-label">★ Criterio WoQ</div>
+            <div class="phase2-star-text" id="revealed-star"></div>
+          </div>
+
+          <!-- Switches de votación -->
+          <div id="voting-area" style="display:none;">
+            <div class="voters-list" id="voters-list"></div>
+            <div class="phase2-counters">
+              <span class="result-badge">Sí: <span id="count-yes">0</span></span>
+              <span class="result-badge no-badge">No: <span id="count-no">0</span></span>
+            </div>
+            <div style="margin-top:14px; display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
+              <button id="btn-finalize-vote" type="button" class="primary" disabled>Finalizar decisión</button>
+              <div id="phase2-result"></div>
+            </div>
+          </div>
+
+          <!-- Contador procesados -->
+          <div class="phase2-progress" id="phase2-deck-count">
+            <span>Procesados</span>
+            <div class="progress-pips" id="phase2-pips"></div>
+            <span class="progress-count" id="phase2-count-label">0/0</span>
+          </div>
+
+          <!-- Estado vacío inicial -->
+          <div class="phase2-empty" id="phase2-empty-state">
+            Extrae un hallazgo del mazo para comenzar la clasificación.
+          </div>
+
+        </div><!-- /.phase2-center -->
+
+        <!-- Derecha — mazo WoQ ★ (torpedo) -->
+        <div class="deck-col" id="deck-star">
+          <div class="deck-col-label" style="max-width:200px;">Solo es winner el que no es qualifier</div>
+          <div class="deck-stack">
+            <div class="card3d" id="card3d-star">
+              <!-- Cara cerrada: icono torpedo -->
+              <div class="card-face">
+                <img src="img/Torpedo.png" alt="Criterio WoQ ★" draggable="false">
+              </div>
+              <!-- Cara revelada: pregunta -->
+              <div class="card-back">
+                <div class="card-back-cat">Criterio ★</div>
+                <div class="card-back-text" id="card-back-star-text"></div>
+              </div>
+            </div>
+          </div>
+          <button id="btn-draw-star" class="primary" type="button" disabled>Extraer carta ★</button>
+        </div>
+
+      </div><!-- /.phase2-stage -->
+
+      <div style="margin-top:24px;">
+        <button id="btn-back-to-home" type="button">Volver al inicio</button>
+      </div>
+    </section>
+
+    <!-- ─── RESULTS ─────────────────────────────────────────────────────────── -->
+    <section id="screen-results" class="screen" aria-labelledby="results-title">
+      <h2 id="results-title" class="screen-title">Winners &amp; Qualifiers: Resultados</h2>
+
+      <div id="results-org" class="results-org-line" aria-live="polite"></div>
+
+      <div class="podium-wrap" id="results-podium" aria-live="polite"></div>
+
+      <p class="vrio-note">⚠ Precaución: los Winners deben siempre ser sometidos a análisis VRIO para ser validados como recursos o capacidades estratégicas.</p>
+
+      <div class="final-report" id="final-report">
+        <div class="final-table" id="winners-table-wrap">
+          <h3>Winners</h3>
+          <table id="winners-table"><thead><tr><th>Hallazgo</th><th>Tipo</th><th>Jugador</th></tr></thead><tbody></tbody></table>
+        </div>
+        <div class="final-table" id="qualifiers-table-wrap">
+          <h3>Qualifiers</h3>
+          <table id="qualifiers-table"><thead><tr><th>Hallazgo</th><th>Tipo</th><th>Jugador</th></tr></thead><tbody></tbody></table>
+        </div>
+      </div>
+
+      <div class="print-actions">
+        <button id="btn-print-results" class="primary" type="button">Imprimir resultados</button>
+      </div>
+      <div style="margin-top:14px;">
+        <button id="btn-back-to-home-2" type="button">Volver al inicio</button>
+      </div>
+    </section>
+  </main>
+
+  <!-- ─── MODAL: CONFIRMAR SALIDA ────────────────────────────────────────────── -->
+  <div id="confirm-exit-overlay" class="confirm-overlay" aria-modal="true" role="dialog" aria-labelledby="confirm-exit-title" hidden>
+    <div class="confirm-dialog">
+      <button class="confirm-close" id="confirm-exit-cancel" aria-label="Cancelar">×</button>
+      <div class="confirm-icon">!</div>
+      <h3 id="confirm-exit-title" class="confirm-title">¿Salir de la partida?</h3>
+      <p class="confirm-body">Se borrarán todos los datos de la partida actual: jugadores, hallazgos y clasificaciones. Esta acción no se puede deshacer.</p>
+      <div class="confirm-actions">
+        <button id="confirm-exit-ok" class="primary" type="button">Aceptar</button>
+        <button id="confirm-exit-cancel2" type="button">Cancelar</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+(function () {
+  'use strict';
+
+  // ─── CONSTANTS ─────────────────────────────────────────────────────────────
+
+  const MIN_PLAYERS     = 3;
+  const MAX_PLAYERS     = 10;
+  const MAX_FINDINGS    = 10;
+  const PHASE1_DURATION = 300;
+
+  const ANSWER   = Object.freeze({ YES: 'Sí', NO: 'No' });
+  const TYPE     = Object.freeze({ RESOURCE: 'Recurso', CAPACITY: 'Capacidad' });
+  const FEEDBACK = Object.freeze({ INFO: 'info', ERROR: 'error', SUCCESS: 'success' });
+
+  // ─── DATA ──────────────────────────────────────────────────────────────────
+
+  const QUESTIONS_DECK = Object.freeze([
+    { category: 'Conocimiento tácito', text: '¿Qué truco usas en tu trabajo que no está escrito en ningún manual?' },
+    { category: 'Conocimiento tácito', text: 'Si alguien nuevo llega a tu puesto, ¿qué consejo le darías para no equivocarse?' },
+    { category: 'Conocimiento tácito', text: '¿Qué es lo más difícil de explicar de tu trabajo, pero que tú ya lo haces en automático?' },
+    { category: 'Conocimiento tácito', text: '¿Qué detalle pequeño marca la diferencia en hacerlo bien?' },
+    { category: 'Conocimiento tácito', text: '¿Qué error cometiste una vez que nunca olvidarás y qué aprendiste?' },
+    { category: 'Conocimiento tácito', text: '¿Qué cosa aprendiste mirando a otro y nunca lo viste en un curso?' },
+    { category: 'Conocimiento tácito', text: '¿Qué actividad haces con "tu estilo propio" que otros imitan?' },
+    { category: 'Conocimiento tácito', text: '¿Qué tarea solo tú sabes hacer de cierta forma que asegura el resultado?' },
+    { category: 'Relaciones y redes informales', text: 'Cuando tienes un problema urgente, ¿a quién llamas primero y por qué?' },
+    { category: 'Relaciones y redes informales', text: '¿Quién, fuera de tu área, te ha salvado de un apuro más de una vez?' },
+    { category: 'Relaciones y redes informales', text: '¿Con qué persona externa (proveedor, cliente, contacto) tenemos un puente clave?' },
+    { category: 'Relaciones y redes informales', text: '¿Qué relación personal facilita que un proceso avance sin trabas?' },
+    { category: 'Relaciones y redes informales', text: '¿Qué conversación de pasillo o café evita más problemas que una reunión formal?' },
+    { category: 'Relaciones y redes informales', text: '¿Quién es tu "gurú" interno, al que consultas cuando nada funciona?' },
+    { category: 'Relaciones y redes informales', text: '¿Qué cliente o aliado confía en ti más allá de lo que dice el contrato?' },
+    { category: 'Relaciones y redes informales', text: '¿Quién tiene un conocimiento que no figura en su cargo oficial?' },
+    { category: 'Rutinas y costumbres colectivas', text: '¿Qué costumbre de tu equipo hace que todo fluya mejor?' },
+    { category: 'Rutinas y costumbres colectivas', text: '¿Qué pequeño ritual (reunión corta, saludo, checklist informal) sostiene el trabajo?' },
+    { category: 'Rutinas y costumbres colectivas', text: '¿Qué rutina heredaste de un compañero anterior que aún usas?' },
+    { category: 'Rutinas y costumbres colectivas', text: '¿Qué práctica repiten todos aunque nunca fue ordenada por la gerencia?' },
+    { category: 'Rutinas y costumbres colectivas', text: '¿Qué gesto o hábito mantiene motivado al equipo?' },
+    { category: 'Rutinas y costumbres colectivas', text: '¿Qué cosa hacen "siempre igual" porque funciona, aunque nadie sabe quién lo inventó?' },
+    { category: 'Rutinas y costumbres colectivas', text: '¿Qué momento del día es clave para coordinarse sin que esté en la agenda?' },
+    { category: 'Rutinas y costumbres colectivas', text: '¿Qué práctica informal evita que haya errores grandes?' },
+    { category: 'Intuiciones y toma de decisiones', text: '¿Qué señales te dicen que algo va a salir mal antes de que pase?' },
+    { category: 'Intuiciones y toma de decisiones', text: '¿Qué sabes detectar mejor que una máquina o un reporte?' },
+    { category: 'Intuiciones y toma de decisiones', text: '¿Cómo decides rápido cuando no tienes toda la información?' },
+    { category: 'Intuiciones y toma de decisiones', text: '¿Qué "olfato" has desarrollado con la experiencia?' },
+    { category: 'Intuiciones y toma de decisiones', text: '¿Qué ejemplo recuerdas de haber resuelto algo con intuición más que con datos?' },
+    { category: 'Intuiciones y toma de decisiones', text: '¿Qué indicador no oficial usas para saber que el trabajo va bien?' },
+    { category: 'Intuiciones y toma de decisiones', text: '¿Qué regla no escrita sigues cuando hay presión?' },
+    { category: 'Intuiciones y toma de decisiones', text: '¿Qué decisión tomas distinto a como lo haría alguien nuevo?' },
+    { category: 'Vulnerabilidades y resiliencia', text: 'Si mañana no vinieras, ¿qué dejaría de hacerse?' },
+    { category: 'Vulnerabilidades y resiliencia', text: '¿Qué cosa depende solo de ti y debería estar más compartida?' },
+    { category: 'Vulnerabilidades y resiliencia', text: '¿Qué recurso, al perderse, sería un desastre para tu equipo?' },
+    { category: 'Vulnerabilidades y resiliencia', text: '¿Qué conocimiento es frágil porque solo lo maneja una persona?' },
+    { category: 'Vulnerabilidades y resiliencia', text: '¿Qué herramienta o persona es tu "plan B" cuando todo falla?' },
+    { category: 'Vulnerabilidades y resiliencia', text: '¿Qué práctica protege al equipo en momentos de crisis?' },
+    { category: 'Vulnerabilidades y resiliencia', text: '¿Qué hemos hecho para seguir adelante aun cuando faltaban recursos?' },
+    { category: 'Vulnerabilidades y resiliencia', text: '¿Qué aprendizajes salieron de un error o falla que nos hizo más fuertes?' },
+  ]);
+
+  const FEATURES_DECK = Object.freeze([
+    { category: 'Singularidad frente a la competencia', text: 'Es un recurso o capacidad que pocos competidores poseen o dominan.' },
+    { category: 'Singularidad frente a la competencia', text: 'Su replicación es difícil o costosa para otros actores del mercado.' },
+    { category: 'Singularidad frente a la competencia', text: 'Destaca por originalidad o rareza dentro del sector.' },
+    { category: 'Singularidad frente a la competencia', text: 'Si desapareciera, no podría reemplazarse fácilmente en el mercado.' },
+    { category: 'Singularidad frente a la competencia', text: 'No depende de proveedores genéricos, sino de fuentes únicas o relaciones exclusivas.' },
+    { category: 'Singularidad frente a la competencia', text: 'Tomaría años o gran inversión que otro construya algo equivalente.' },
+    { category: 'Singularidad frente a la competencia', text: 'Supera los estándares básicos que todos necesitan para operar.' },
+    { category: 'Singularidad frente a la competencia', text: 'Cuando se muestra externamente, genera sorpresa o admiración, no indiferencia.' },
+    { category: 'Valor percibido por cliente y procesos', text: 'Aporta beneficios tangibles al cliente, mejorando su experiencia.' },
+    { category: 'Valor percibido por cliente y procesos', text: 'Contribuye a reducir costos, tiempos o errores de forma medible.' },
+    { category: 'Valor percibido por cliente y procesos', text: 'Su ausencia tendría un impacto visible en la satisfacción o lealtad del cliente.' },
+    { category: 'Valor percibido por cliente y procesos', text: 'Es un recurso reconocible y valorado por el usuario final.' },
+    { category: 'Valor percibido por cliente y procesos', text: 'Incrementa la probabilidad de ganar negocios, contratos o licitaciones.' },
+    { category: 'Valor percibido por cliente y procesos', text: 'Sostiene la calidad de los productos o servicios más allá del mínimo esperado.' },
+    { category: 'Valor percibido por cliente y procesos', text: 'Genera un valor difícil de sustituir por alternativas externas.' },
+    { category: 'Valor percibido por cliente y procesos', text: 'Es notorio incluso para quienes no son expertos, creando impacto emocional o funcional.' },
+    { category: 'Rareza y origen distintivo', text: 'No hay muchas organizaciones con un recurso o capacidad semejante.' },
+    { category: 'Rareza y origen distintivo', text: 'Posee una esencia única derivada de la historia o trayectoria propia de la organización.' },
+    { category: 'Rareza y origen distintivo', text: 'Nació de aprendizajes, errores o experiencias irrepetibles.' },
+    { category: 'Rareza y origen distintivo', text: 'Depende de personas con talentos escasos o difíciles de encontrar.' },
+    { category: 'Rareza y origen distintivo', text: 'No puede ser replicado sin vivir la misma experiencia organizacional.' },
+    { category: 'Rareza y origen distintivo', text: 'Tiene un sello cultural o simbólico propio de la empresa.' },
+    { category: 'Rareza y origen distintivo', text: 'Su desarrollo refleja valores o identidad corporativa profundos.' },
+    { category: 'Rareza y origen distintivo', text: 'Si desapareciera, dejaría un vacío imposible de reemplazar.' },
+    { category: 'Difícil de imitar o copiar', text: 'Su conocimiento está poco documentado y se transmite de forma tácita.' },
+    { category: 'Difícil de imitar o copiar', text: 'Está protegido por barreras legales, secretos industriales o relaciones exclusivas.' },
+    { category: 'Difícil de imitar o copiar', text: 'Es fácil de ver, pero difícil de entender y replicar correctamente.' },
+    { category: 'Difícil de imitar o copiar', text: 'Su funcionamiento depende de confianza y vínculos internos difíciles de copiar.' },
+    { category: 'Difícil de imitar o copiar', text: 'Requiere habilidades o experiencia acumulada que no se compran.' },
+    { category: 'Difícil de imitar o copiar', text: 'Su efectividad depende de la cultura interna y los valores compartidos.' },
+    { category: 'Difícil de imitar o copiar', text: 'Tiene un nivel de complejidad o interdependencia que desalienta la imitación.' },
+    { category: 'Difícil de imitar o copiar', text: 'Aun si se mostrara públicamente, seguiría siendo difícil de reproducir.' },
+    { category: 'Capacidad organizativa para aprovecharlo', text: 'La organización cuenta con procesos que maximizan su uso y valor.' },
+    { category: 'Capacidad organizativa para aprovecharlo', text: 'Existen roles o responsables claros que lo gestionan y protegen.' },
+    { category: 'Capacidad organizativa para aprovecharlo', text: 'Puede escalarse o aplicarse en distintas áreas o proyectos.' },
+    { category: 'Capacidad organizativa para aprovecharlo', text: 'Está alineado a los objetivos estratégicos y a la visión corporativa.' },
+    { category: 'Capacidad organizativa para aprovecharlo', text: 'Recibe inversión constante o mantenimiento para conservar su efectividad.' },
+    { category: 'Capacidad organizativa para aprovecharlo', text: 'Se aprovecha mediante aprendizaje continuo y mejora adaptativa.' },
+    { category: 'Capacidad organizativa para aprovecharlo', text: 'Aporta sin depender del contexto: sigue siendo útil ante cambios de mercado o regulación.' },
+    { category: 'Capacidad organizativa para aprovecharlo', text: 'Evoluciona junto con la organización, adaptándose a nuevos desafíos.' },
+  ]);
+
+  const STAR_DECK = Object.freeze([
+    { question: '¿Este recurso es difícil de copiar o de igualar por otros?',               clarification: 'Poseemos una capacidad o activo que otros no pueden replicar fácilmente.' },
+    { question: '¿Depende de un conocimiento, práctica o relación que solo nosotros tenemos?', clarification: 'Es un saber o vínculo único, nacido de nuestra experiencia o contexto.' },
+    { question: '¿Genera valor visible o apreciable para el cliente?',                      clarification: 'Impacta directamente en la satisfacción, fidelidad o preferencia del cliente.' },
+    { question: '¿Requiere experiencia o cultura interna para funcionar bien?',             clarification: 'Se apoya en nuestra forma de trabajar, en hábitos o valores propios.' },
+    { question: '¿Podría sostenerse sin una persona o equipo específico?',                  clarification: 'Está institucionalizado; no depende de individuos puntuales.' },
+    { question: '¿Contribuye directamente a que logremos nuestros objetivos estratégicos?', clarification: 'Está alineado con la dirección y las prioridades de la organización.' },
+    { question: '¿Se mantiene vigente si el entorno o la tecnología cambian?',              clarification: 'Es adaptable y conserva su valor incluso ante cambios externos.' },
+    { question: '¿Podemos ampliarlo o aplicarlo a otras áreas sin perder su fuerza?',      clarification: 'Es escalable y puede generar más valor en distintas unidades o proyectos.' },
+    { question: '¿Es reconocido fuera del equipo como algo que hacemos mejor que otros?',   clarification: 'Tiene reputación diferenciadora dentro o fuera de la organización.' },
+    { question: '¿Hemos invertido tiempo o recursos en protegerlo o fortalecerlo?',        clarification: 'Está cuidado, formalizado o protegido como un activo estratégico.' },
+  ]);
+
+  // ─── STATE ─────────────────────────────────────────────────────────────────
+
+  const state = {
+    players: [],
+    findings: [],
+    currentPlayerIndex: 0,
+    questionsPool: [],
+    featuresPool: [],
+    starPool: [],
+    turnActive: false,
+    currentQuestion: null,
+    currentFeature: null,
+    currentAnswer: null,
+    phase2Order: [],
+    phase2SelectedIndex: null,
+    org: { name: '', type: '', typeOther: '' },
+  };
+
+  // ─── UTILITIES ─────────────────────────────────────────────────────────────
+
+  function drawRandom(pool) {
+    if (!pool.length) return null;
+    const i = Math.floor(Math.random() * pool.length);
+    return pool.splice(i, 1)[0];
+  }
+
+  function shuffle(arr) {
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+  }
+
+  function refillPool(deck, key) { state[key] = deck.map(c => ({ ...c })); }
+
+  function resetAllPools() {
+    refillPool(QUESTIONS_DECK, 'questionsPool');
+    refillPool(FEATURES_DECK,  'featuresPool');
+    refillPool(STAR_DECK,      'starPool');
+  }
+
+  // ─── GAME LOGIC (pure) ─────────────────────────────────────────────────────
+
+  function detectType(text) {
+    const first = (text.split(/\s+/)[0] || '').replace(/^[^\wáéíóúüñ]+|[^\wáéíóúüñ]+$/g, '');
+    return /(ar|er|ir)$/i.test(first) ? TYPE.CAPACITY : TYPE.RESOURCE;
+  }
+
+  function calcPhase1Score(type, answer) {
+    return (type === TYPE.CAPACITY ? 5 : 3) + (answer === ANSWER.YES ? 1 : 0);
+  }
+
+  function buildFinding(playerName, text, answer, feature) {
+    const type  = detectType(text);
+    const score = calcPhase1Score(type, answer);
+    return {
+      jugador:        playerName,
+      hallazgo:       text,
+      tipo:           type,
+      respondio:      answer,
+      pregunta:       feature ? `¿Se cumple la característica "${feature.text}"?` : '',
+      caracteristica: feature ? `${feature.category} — ${feature.text}` : '',
+      puntaje:        score,
+      processed:      false,
+      revealed:       false,
+      classification: null,
+      phase2Score:    0,
+      finalScore:     0,
+    };
+  }
+
+  function isOrgValid() {
+    const name = (el.orgNameInput?.value || '').trim();
+    const type = el.orgTypeSelect?.value || '';
+    if (!name || !type) return false;
+    if (type === 'Otra') return !!(el.orgTypeOtherInput?.value || '').trim();
+    return true;
+  }
+
+  // ─── TIMER ─────────────────────────────────────────────────────────────────
+
+  const timer = {
+    _id: null,
+    remaining: 0,
+    start(seconds, onExpire) {
+      this.stop();
+      this.remaining = seconds;
+      this._render();
+      this._id = setInterval(() => {
+        this.remaining--;
+        this._render();
+        if (this.remaining <= 0) { clearInterval(this._id); this._id = null; onExpire(); }
+      }, 1000);
+    },
+    stop() {
+      if (this._id) { clearInterval(this._id); this._id = null; }
+      this.remaining = 0;
+      this._render();
+    },
+    _render() {
+      if (!el.timerDisplay) return;
+      const m = String(Math.floor(this.remaining / 60)).padStart(2, '0');
+      const s = String(this.remaining % 60).padStart(2, '0');
+      el.timerDisplay.textContent = `${m}:${s}`;
+      // Anillo SVG — lleno cuando remaining=PHASE1_DURATION, vacío cuando 0
+      if (el.ringFg) {
+        const circ = 276.46;
+        const pct  = PHASE1_DURATION > 0
+          ? Math.max(0, Math.min(1, this.remaining / PHASE1_DURATION))
+          : 0;
+        el.ringFg.style.strokeDashoffset = String(+(circ * (1 - pct)).toFixed(2));
+      }
+      const running = this.remaining > 0;
+      if (el.timerRingSvg) {
+        el.timerRingSvg.classList.toggle('warn', running && this.remaining <= 60 && this.remaining > 30);
+        el.timerRingSvg.classList.toggle('crit', running && this.remaining <= 30);
+      }
+      if (el.timerWrap) {
+        el.timerWrap.classList.toggle('crit', running && this.remaining <= 30);
+      }
+    },
+  };
+
+  // ─── DOM REFS ──────────────────────────────────────────────────────────────
+
+  let el = {};
+
+  function initRefs() {
+    el = {
+      btnStartHome:        document.getElementById('btn-start-home'),
+      btnBack:             document.getElementById('btn-back'),
+      btnAddPlayer:        document.getElementById('btn-add-player'),
+      btnStartGame:        document.getElementById('btn-start-game'),
+      playerNameInput:     document.getElementById('player-name'),
+      playersUl:           document.getElementById('players-ul'),
+      playersNote:         document.getElementById('players-note'),
+      playerFeedback:      document.getElementById('player-feedback'),
+      orgNameInput:        document.getElementById('org-name'),
+      orgTypeSelect:       document.getElementById('org-type'),
+      orgTypeOtherWrap:    document.getElementById('org-type-other-wrap'),
+      orgTypeOtherInput:   document.getElementById('org-type-other'),
+      currentPlayerName:   document.getElementById('current-player-name'),
+      typeBadge:           document.getElementById('tipo-detected'),
+      btnSelectCards:      document.getElementById('btn-select-cards'),
+      timerDisplay:        document.getElementById('timer-display'),
+      ringFg:              document.getElementById('ring-fg'),
+      timerRingSvg:        document.getElementById('timer-ring-svg'),
+      timerWrap:           document.getElementById('timer-wrap'),
+      card3dQuestion:      document.getElementById('card3d-question'),
+      card3dFeature:       document.getElementById('card3d-feature'),
+      cardBackQCat:        document.getElementById('card-back-question-cat'),
+      cardBackQText:       document.getElementById('card-back-question-text'),
+      cardBackFCat:        document.getElementById('card-back-feature-cat'),
+      cardBackFText:       document.getElementById('card-back-feature-text'),
+      findingText:         document.getElementById('finding-text'),
+      featureQuestion:     document.getElementById('question-text'),
+      btnYes:              document.getElementById('btn-answer-yes'),
+      btnNo:               document.getElementById('btn-answer-no'),
+      btnNextTurn:         document.getElementById('btn-next-turn'),
+      btnGoPhase2:         document.getElementById('btn-go-phase2'),
+      btnExtractFinding:   document.getElementById('btn-extract-finding'),
+      card3dFinding:       document.getElementById('card3d-finding'),
+      card3dStar:          document.getElementById('card3d-star'),
+      cardBackFPLayer:     document.getElementById('card-back-finding-player'),
+      cardBackFText2:      document.getElementById('card-back-finding-text'),
+      cardBackStarText:    document.getElementById('card-back-star-text'),
+      phase1FindingCount:  document.getElementById('phase1-finding-count'),
+      phase1Pips:          document.getElementById('phase1-pips'),
+      phase1CountLabel:    document.getElementById('phase1-count-label'),
+      phase2DeckCount:     document.getElementById('phase2-deck-count'),
+      phase2Pips:          document.getElementById('phase2-pips'),
+      phase2CountLabel:    document.getElementById('phase2-count-label'),
+      playersCounterBig:   document.getElementById('players-counter-big'),
+      playersCounterDots:  document.getElementById('players-counter-dots'),
+      phase2FindingInfo:   document.getElementById('phase2-finding-info'),
+      phase2FindingType:   document.getElementById('phase2-finding-type'),
+      phase2FindingDisplay:document.getElementById('phase2-finding-display'),
+      phase2StarWrap:      document.getElementById('phase2-star-wrap'),
+      phase2EmptyState:    document.getElementById('phase2-empty-state'),
+      btnDrawStar:         document.getElementById('btn-draw-star'),
+      revealedStar:        document.getElementById('revealed-star'),
+      votingArea:          document.getElementById('voting-area'),
+      votersList:          document.getElementById('voters-list'),
+      countYes:            document.getElementById('count-yes'),
+      countNo:             document.getElementById('count-no'),
+      btnFinalizeVote:     document.getElementById('btn-finalize-vote'),
+      phase2Result:        document.getElementById('phase2-result'),
+      resultsOrg:          document.getElementById('results-org'),
+      resultsPodium:       document.getElementById('results-podium'),
+      winnersTableBody:    document.querySelector('#winners-table tbody'),
+      qualifiersTableBody: document.querySelector('#qualifiers-table tbody'),
+      btnBackToHome:       document.getElementById('btn-back-to-home'),
+      btnBackToHome2:      document.getElementById('btn-back-to-home-2'),
+      btnBackToHomeP1:     document.getElementById('btn-back-to-home-p1'),
+      btnPrint:            document.getElementById('btn-print-results'),
+    };
+  }
+
+  // ─── SCREEN MANAGEMENT ─────────────────────────────────────────────────────
+
+  const SCREEN_LABELS = {
+    home:    'Inicio',
+    players: 'FIG.01 · Configuración',
+    phase1:  'FIG.02 · Exploración',
+    phase2:  'FIG.03 · Clasificación',
+    results: 'FIG.04 · Resultados',
+  };
+
+  function showScreen(name) {
+    ['home', 'players', 'phase1', 'phase2', 'results'].forEach(id => {
+      document.getElementById(`screen-${id}`)?.classList.toggle('visible', id === name);
+    });
+    const lbl = document.getElementById('header-screen-label');
+    if (lbl) lbl.textContent = SCREEN_LABELS[name] || '';
+  }
+
+  // ─── FEEDBACK ──────────────────────────────────────────────────────────────
+
+  function showFeedback(msg, type = FEEDBACK.INFO, persist = false) {
+    const fb = el.playerFeedback;
+    if (!fb) return;
+    fb.textContent = msg;
+    fb.className = `feedback ${type}`;
+    if (!persist) setTimeout(() => { if (fb.textContent === msg) fb.textContent = ''; }, 3500);
+  }
+
+  // ─── RENDERING ─────────────────────────────────────────────────────────────
+
+  function renderPlayersList() {
+    const ul = el.playersUl;
+    if (!ul) return;
+    ul.innerHTML = '';
+    // Counter-ring dots
+    if (el.playersCounterBig)
+      el.playersCounterBig.textContent = String(state.players.length);
+    if (el.playersCounterDots) {
+      const dots = el.playersCounterDots.querySelectorAll('.counter-dot');
+      dots.forEach((d, i) => d.classList.toggle('filled', i < state.players.length));
+    }
+
+    if (state.players.length === 0) { return; }
+
+    state.players.forEach((name, idx) => {
+      const li   = document.createElement('li');
+      li.dataset.idx = String(idx + 1).padStart(2, '0');
+      const span = document.createElement('span');
+      span.textContent = name;
+      const btn  = document.createElement('button');
+      btn.type = 'button';
+      btn.textContent = '×';
+      btn.title = 'Eliminar';
+      btn.addEventListener('click', () => {
+        state.players.splice(idx, 1);
+        renderPlayersList();
+        updateStartButton();
+      });
+      li.appendChild(span);
+      li.appendChild(btn);
+      ul.appendChild(li);
+    });
+  }
+
+  function updateStartButton() {
+    if (!el.btnStartGame) return;
+    const playersOk = state.players.length >= MIN_PLAYERS && state.players.length <= MAX_PLAYERS;
+    el.btnStartGame.disabled = !(playersOk && isOrgValid());
+
+    if (el.playersNote) {
+      if (!isOrgValid()) {
+        el.playersNote.textContent = 'Complete los datos de partida obligatorios.';
+      } else if (state.players.length < MIN_PLAYERS) {
+        el.playersNote.textContent = `Faltan ${MIN_PLAYERS - state.players.length} jugador(es). Mín ${MIN_PLAYERS}, máx ${MAX_PLAYERS}.`;
+      } else if (state.players.length > MAX_PLAYERS) {
+        el.playersNote.textContent = `Máximo de jugadores alcanzado (${MAX_PLAYERS}).`;
+      } else {
+        el.playersNote.textContent = `${state.players.length} jugadores listos. Puedes comenzar.`;
+      }
+    }
+  }
+
+  function updateGoPhase2Button() {
+    if (el.btnGoPhase2) el.btnGoPhase2.disabled = state.findings.length < 1;
+    // Phase 1 progress pips
+    const n = state.findings.length;
+    if (el.phase1Pips) {
+      const pips = el.phase1Pips.querySelectorAll('.pip');
+      pips.forEach((p, i) => p.classList.toggle('done', i < n));
+    }
+    if (el.phase1CountLabel) el.phase1CountLabel.textContent = `${n}/${MAX_FINDINGS}`;
+  }
+
+  function updateCurrentPlayerDisplay() {
+    if (el.currentPlayerName) el.currentPlayerName.textContent = state.players[state.currentPlayerIndex] || '—';
+  }
+
+  let _typeBadgeTimer = null;
+  function showTypeBadge(type) {
+    if (!el.typeBadge) return;
+    el.typeBadge.textContent = `Tipo: ${type}`;
+    el.typeBadge.classList.add('visible');
+    clearTimeout(_typeBadgeTimer);
+    _typeBadgeTimer = setTimeout(() => {
+      el.typeBadge.classList.remove('visible');
+      el.typeBadge.textContent = '';
+    }, 4000);
+  }
+
+  function buildRevealedCard(card, finding) {
+    card.className = 'hallazgo-card revealed';
+    card.innerHTML = '';
+    const h4 = document.createElement('h4');
+    h4.textContent = finding.tipo;
+    const p  = document.createElement('p');
+    p.textContent  = finding.hallazgo;
+    card.appendChild(h4);
+    card.appendChild(p);
+  }
+
+  // ─── PHASE 2 — MAZO DECK SYSTEM ───────────────────────────────────────────────
+
+  function updatePhase2DeckCount() {
+    const remaining  = state.findings.filter(f => !f.processed).length;
+    const total      = state.findings.length;
+    const processed  = total - remaining;
+    // Progress pips — rebuild if total changed
+    if (el.phase2Pips) {
+      if (el.phase2Pips.children.length !== total) {
+        el.phase2Pips.innerHTML = '';
+        for (let i = 0; i < total; i++) {
+          const s = document.createElement('span');
+          s.className = 'pip';
+          el.phase2Pips.appendChild(s);
+        }
+      }
+      const pips = el.phase2Pips.querySelectorAll('.pip');
+      pips.forEach((p, i) => p.classList.toggle('done', i < processed));
+    }
+    if (el.phase2CountLabel) el.phase2CountLabel.textContent = `${processed}/${total}`;
+    if (el.btnExtractFinding) el.btnExtractFinding.disabled = remaining === 0 || state.phase2SelectedIndex !== null;
+  }
+
+  function renderPhase2Cards() {
+    state.phase2SelectedIndex = null;
+    // Voltear cartas de vuelta a su cara cerrada
+    if (el.card3dFinding) el.card3dFinding.classList.remove('flipped');
+    if (el.card3dStar)    el.card3dStar.classList.remove('flipped');
+    if (el.cardBackFPLayer)  el.cardBackFPLayer.textContent  = '';
+    if (el.cardBackFText2)   el.cardBackFText2.textContent   = '';
+    if (el.cardBackStarText) el.cardBackStarText.textContent = '';
+    // Limpiar centro
+    if (el.phase2FindingInfo)  el.phase2FindingInfo.style.display  = 'none';
+    if (el.phase2StarWrap)     el.phase2StarWrap.style.display     = 'none';
+    if (el.votingArea)         el.votingArea.style.display         = 'none';
+    if (el.phase2EmptyState)   el.phase2EmptyState.style.display   = 'flex';
+    if (el.revealedStar)       el.revealedStar.innerHTML           = '';
+    if (el.phase2Result)       el.phase2Result.innerHTML           = '';
+    if (el.btnDrawStar)        el.btnDrawStar.disabled             = true;
+    updatePhase2DeckCount();
+  }
+
+  function onExtractFinding() {
+    if (state.phase2SelectedIndex !== null) return;
+    // Encontrar el primer hallazgo sin procesar en el orden aleatorio
+    let nextPos = -1;
+    for (let pos = 0; pos < state.phase2Order.length; pos++) {
+      if (!state.findings[state.phase2Order[pos]].processed) { nextPos = pos; break; }
+    }
+    if (nextPos === -1) { showFeedback('No quedan hallazgos por clasificar.', FEEDBACK.INFO, true); return; }
+
+    state.phase2SelectedIndex = nextPos;
+    const finding = state.findings[state.phase2Order[nextPos]];
+    finding.revealed = true;
+
+    // Rellenar y voltear carta de hallazgo
+    if (el.cardBackFPLayer)  el.cardBackFPLayer.textContent  = `${finding.tipo} · ${finding.jugador}`;
+    if (el.cardBackFText2)   el.cardBackFText2.textContent   = finding.hallazgo;
+    if (el.card3dFinding)    el.card3dFinding.classList.add('flipped');
+
+    // Mostrar hallazgo en el centro
+    if (el.phase2FindingType)    el.phase2FindingType.textContent    = `${finding.tipo} · ${finding.jugador}`;
+    if (el.phase2FindingDisplay) el.phase2FindingDisplay.textContent = finding.hallazgo;
+    if (el.phase2FindingInfo)    el.phase2FindingInfo.style.display  = 'block';
+    if (el.phase2EmptyState)     el.phase2EmptyState.style.display   = 'none';
+
+    updatePhase2DeckCount();
+    if (el.btnDrawStar) el.btnDrawStar.disabled = false;
+    showFeedback('Hallazgo revelado. Extrae una carta del mazo ★.', FEEDBACK.INFO);
+  }
+
+  function renderResults() {
+    // Build score totals per player
+    const totals = Object.fromEntries(state.players.map(p => [p, 0]));
+    state.findings.forEach(f => {
+      if (typeof f.finalScore === 'number') totals[f.jugador] = (totals[f.jugador] || 0) + f.finalScore;
+    });
+    const ranking = Object.entries(totals)
+      .map(([player, score]) => ({ player, score }))
+      .sort((a, b) => b.score - a.score);
+
+    // Org line
+    if (el.resultsOrg) {
+      const { name, type, typeOther } = state.org;
+      let text = name ? `Organización: ${name}` : '';
+      if (type) {
+        if (text) text += ' — ';
+        text += `Tipo: ${type}`;
+        if (type === 'Otra' && typeOther) text += ` (${typeOther})`;
+      }
+      el.resultsOrg.textContent = text;
+    }
+
+    // Podium — with tie detection
+    if (el.resultsPodium) {
+      el.resultsPodium.innerHTML = '';
+
+      if (ranking.length > 0) {
+        const podiumEl = document.createElement('div');
+        podiumEl.className = 'podium';
+
+        const numerals = ['I', 'II', 'III'];
+        const makeCard = ({ player, score }, rankNum, labelText, isFirst) => {
+          const scoreLabel = typeof score === 'number' ? score + ' PTS' : score;
+          const card = document.createElement('div');
+          card.className = 'podium-card' + (isFirst ? ' podium-first' : '');
+          card.innerHTML = `
+            <div class="podium-label">${labelText}</div>
+            <div class="podium-rank">${numerals[rankNum - 1]}</div>
+            <div class="podium-name">${player}</div>
+            <div class="podium-score">${scoreLabel}</div>`;
+          return card;
+        };
+
+        const rank1 = ranking.filter(p => p.score === ranking[0].score);
+        const rest  = ranking.slice(rank1.length);
+        const rank2 = rest.length > 0 ? rest.filter(p => p.score === rest[0].score) : [];
+        const rank3 = rest.slice(rank2.length);
+
+        if (rank1.length >= 2) {
+          // Tie for 1st: [1st-A | 1st-B | 2nd or empty]
+          podiumEl.classList.add('podium-tie-first');
+          podiumEl.appendChild(makeCard(rank1[0], 1, '01 — Winner', true));
+          podiumEl.appendChild(makeCard(rank1[1], 1, '01 — Winner', true));
+          podiumEl.appendChild(rank2[0]
+            ? makeCard(rank2[0], 2, '02 — Segundo', false)
+            : document.createElement('div'));
+        } else if (rank2.length >= 2) {
+          // Tie for 2nd: [2nd-A | 1st | 2nd-B]
+          podiumEl.appendChild(makeCard(rank2[0], 2, '02 — Segundo', false));
+          podiumEl.appendChild(makeCard(rank1[0], 1, '01 — Winner', true));
+          podiumEl.appendChild(makeCard(rank2[1], 2, '02 — Segundo', false));
+        } else {
+          // No tie: [2nd | 1st | 3rd]
+          podiumEl.appendChild(rank2[0]
+            ? makeCard(rank2[0], 2, '02 — Segundo', false)
+            : document.createElement('div'));
+          podiumEl.appendChild(makeCard(rank1[0], 1, '01 — Winner', true));
+          podiumEl.appendChild(rank3[0]
+            ? makeCard(rank3[0], 3, '03 — Tercero', false)
+            : document.createElement('div'));
+        }
+
+        el.resultsPodium.appendChild(podiumEl);
+      }
+    }
+
+    // Findings tables
+    const winners    = state.findings.filter(f => f.classification?.decision === ANSWER.YES).sort((a, b) => (b.finalScore || 0) - (a.finalScore || 0));
+    const qualifiers = state.findings.filter(f => f.classification?.decision === ANSWER.NO).sort((a, b) => (b.puntaje || 0) - (a.puntaje || 0));
+    renderFindingsTable(el.winnersTableBody, winners);
+    renderFindingsTable(el.qualifiersTableBody, qualifiers);
+  }
+
+  function renderFindingsTable(tbody, findings) {
+    if (!tbody) return;
+    tbody.innerHTML = '';
+    findings.forEach(f => {
+      const tr = document.createElement('tr');
+      [f.hallazgo, f.tipo, f.jugador || '—'].forEach(text => {
+        const td = document.createElement('td');
+        td.textContent = text;
+        tr.appendChild(td);
+      });
+      tbody.appendChild(tr);
+    });
+  }
+
+  // ─── PHASE 1 BOARD ─────────────────────────────────────────────────────────
+
+  function resetPhase1Board() {
+    if (el.featureQuestion)  el.featureQuestion.textContent  = 'Pregunta: —';
+    // Voltear cartas de vuelta a la cara cerrada
+    if (el.card3dQuestion) el.card3dQuestion.classList.remove('flipped');
+    if (el.card3dFeature)  el.card3dFeature.classList.remove('flipped');
+    if (el.cardBackQCat)   el.cardBackQCat.textContent  = '';
+    if (el.cardBackQText)  el.cardBackQText.textContent = '';
+    if (el.cardBackFCat)   el.cardBackFCat.textContent  = '';
+    if (el.cardBackFText)  el.cardBackFText.textContent = '';
+    if (el.findingText)      { el.findingText.value = ''; el.findingText.disabled = true; }
+    if (el.btnYes)           { el.btnYes.disabled = true; el.btnYes.classList.remove('active'); }
+    if (el.btnNo)            { el.btnNo.disabled  = true; el.btnNo.classList.remove('active'); }
+    if (el.btnNextTurn)      el.btnNextTurn.disabled    = true;
+    if (el.btnSelectCards)   el.btnSelectCards.disabled = false;
+    state.currentQuestion = null;
+    state.currentFeature  = null;
+    state.currentAnswer   = null;
+    state.turnActive      = false;
+    timer.stop();
+  }
+
+  // ─── GAME FLOW ─────────────────────────────────────────────────────────────
+
+  function startNewGame() { resetGameState(); showScreen('players'); setTimeout(() => el.orgNameInput?.focus(), 50); }
+
+  function resetGameState() {
+    state.players.length  = 0;
+    state.findings.length = 0;
+    state.currentPlayerIndex  = 0;
+    state.phase2Order         = [];
+    state.phase2SelectedIndex = null;
+    state.org = { name: '', type: '', typeOther: '' };
+    resetAllPools();
+    resetPhase1Board();
+    if (el.orgNameInput)      el.orgNameInput.value  = '';
+    if (el.orgTypeSelect)     el.orgTypeSelect.value = '';
+    if (el.orgTypeOtherInput) el.orgTypeOtherInput.value = '';
+    if (el.orgTypeOtherWrap)  el.orgTypeOtherWrap.style.display = 'none';
+    if (el.playerNameInput)   { el.playerNameInput.value = ''; el.playerNameInput.disabled = false; }
+    if (el.btnAddPlayer)      el.btnAddPlayer.disabled = false;
+    if (el.resultsOrg)          el.resultsOrg.textContent = '';
+    if (el.resultsPodium)       el.resultsPodium.innerHTML = '';
+    if (el.winnersTableBody)    el.winnersTableBody.innerHTML = '';
+    if (el.qualifiersTableBody) el.qualifiersTableBody.innerHTML = '';
+    renderPlayersList();
+    updateStartButton();
+    updateGoPhase2Button();
+  }
+
+  function startPhase1() {
+    if (!isOrgValid()) { showFeedback('Complete los datos de partida obligatorios.', FEEDBACK.ERROR); return; }
+    if (state.players.length < MIN_PLAYERS) { showFeedback(`Se requieren al menos ${MIN_PLAYERS} jugadores.`, FEEDBACK.ERROR); return; }
+    state.org.name     = (el.orgNameInput?.value || '').trim();
+    state.org.type     = el.orgTypeSelect?.value || '';
+    state.org.typeOther = state.org.type === 'Otra' ? (el.orgTypeOtherInput?.value || '').trim() : '';
+    shuffle(state.players);
+    state.findings.length = 0;
+    state.currentPlayerIndex = 0;
+    resetPhase1Board();
+    updateGoPhase2Button();
+    updateCurrentPlayerDisplay();
+    showScreen('phase1');
+    showFeedback('Orden de jugadores establecido al azar. Comienza la Fase 1.', FEEDBACK.INFO);
+    posthog.capture('phase_1_started', { players_count: state.players.length, org_type: state.org.type });
+  }
+
+  function startPhase2() {
+    refillPool(STAR_DECK, 'starPool');
+    state.phase2Order = state.findings.map((_, i) => i);
+    shuffle(state.phase2Order);
+    renderPhase2Cards();
+    showScreen('phase2');
+    showFeedback(`${state.findings.length} hallazgo(s) listos para clasificar.`, FEEDBACK.INFO);
+    posthog.capture('phase_2_started', { findings_count: state.findings.length });
+  }
+
+  function finalizeTurn(save) {
+    const playerName = state.players[state.currentPlayerIndex];
+    const text       = (el.findingText?.value || '').trim();
+    timer.stop();
+
+    if (state.findings.length >= MAX_FINDINGS) {
+      showFeedback('Fase 1 completada. Avanzando a Fase 2…', FEEDBACK.INFO, true);
+      setTimeout(startPhase2, 200);
+      return;
+    }
+
+    if (save && text && state.currentAnswer) {
+      const finding = buildFinding(playerName, text, state.currentAnswer, state.currentFeature);
+      state.findings.push(finding);
+      if (state.findings.length > MAX_FINDINGS) state.findings.length = MAX_FINDINGS;
+      showFeedback(`Turno guardado. ${playerName} obtiene ${finding.puntaje} pts.`, FEEDBACK.SUCCESS);
+      showTypeBadge(finding.tipo);
+    } else {
+      showFeedback(`${playerName} perdió el turno. No se registró hallazgo.`, FEEDBACK.ERROR);
+    }
+
+    updateGoPhase2Button();
+    resetPhase1Board();
+
+    if (state.findings.length >= MAX_FINDINGS) {
+      showFeedback(`Se completaron ${MAX_FINDINGS} hallazgos. Avanzando a Fase 2…`, FEEDBACK.INFO, true);
+      setTimeout(startPhase2, 200);
+      return;
+    }
+
+    state.currentPlayerIndex = (state.currentPlayerIndex + 1) % state.players.length;
+    updateCurrentPlayerDisplay();
+  }
+
+  // ─── EVENT HANDLERS ────────────────────────────────────────────────────────
+
+  function onAddPlayer() {
+    const input = el.playerNameInput;
+    if (!input) return;
+    const name = input.value.trim();
+    if (!name) { showFeedback('Ingresa un nombre válido.', FEEDBACK.ERROR); return; }
+    if (state.players.some(p => p.toLowerCase() === name.toLowerCase())) { showFeedback('Ese nombre ya fue añadido.', FEEDBACK.ERROR); input.value = ''; return; }
+    if (state.players.length >= MAX_PLAYERS) { showFeedback(`Máximo ${MAX_PLAYERS} jugadores.`, FEEDBACK.ERROR); input.value = ''; return; }
+    state.players.push(name);
+    input.value = '';
+    renderPlayersList();
+    updateStartButton();
+    input.focus();
+    if (state.players.length === MAX_PLAYERS) {
+      showFeedback(`Máximo alcanzado (${MAX_PLAYERS}).`, FEEDBACK.INFO, true);
+      input.disabled = true;
+      if (el.btnAddPlayer) el.btnAddPlayer.disabled = true;
+    }
+  }
+
+  function onOrgTypeChange() {
+    const isOther = el.orgTypeSelect?.value === 'Otra';
+    if (el.orgTypeOtherWrap) el.orgTypeOtherWrap.style.display = isOther ? 'block' : 'none';
+    if (!isOther && el.orgTypeOtherInput) el.orgTypeOtherInput.value = '';
+    if (isOther) el.orgTypeOtherInput?.focus();
+    updateStartButton();
+  }
+
+  function onSelectCards() {
+    if (state.turnActive) return;
+    if (state.findings.length >= MAX_FINDINGS) { showFeedback('Fase 1 completada. Avanzando…', FEEDBACK.INFO, true); setTimeout(startPhase2, 200); return; }
+    if (!state.questionsPool.length) refillPool(QUESTIONS_DECK, 'questionsPool');
+    if (!state.featuresPool.length)  refillPool(FEATURES_DECK,  'featuresPool');
+    state.currentQuestion = drawRandom(state.questionsPool);
+    state.currentFeature  = drawRandom(state.featuresPool);
+    // Rellenar y voltear cartas 3D
+    if (el.cardBackQCat)  el.cardBackQCat.textContent  = state.currentQuestion?.category || '';
+    if (el.cardBackQText) el.cardBackQText.textContent = state.currentQuestion?.text     || '';
+    if (el.cardBackFCat)  el.cardBackFCat.textContent  = state.currentFeature?.category  || '';
+    if (el.cardBackFText) el.cardBackFText.textContent = state.currentFeature?.text      || '';
+    if (el.card3dQuestion) el.card3dQuestion.classList.add('flipped');
+    if (el.card3dFeature)  el.card3dFeature.classList.add('flipped');
+    if (el.featureQuestion && state.currentFeature)
+      el.featureQuestion.textContent = `¿Se cumple la característica "${state.currentFeature.text}"?`;
+    if (el.findingText)    { el.findingText.disabled = false; el.findingText.value = ''; el.findingText.focus(); }
+    if (el.btnYes)         { el.btnYes.disabled = false; el.btnYes.classList.remove('active'); }
+    if (el.btnNo)          { el.btnNo.disabled  = false; el.btnNo.classList.remove('active'); }
+    if (el.btnNextTurn)    el.btnNextTurn.disabled    = true;
+    if (el.btnSelectCards) el.btnSelectCards.disabled = true;
+    state.currentAnswer = null;
+    state.turnActive    = true;
+    timer.start(PHASE1_DURATION, onTimerExpired);
+    showFeedback('Cartas seleccionadas. Tienes 5 minutos para redactar y responder.', FEEDBACK.INFO);
+  }
+
+  function onTimerExpired() {
+    if (el.findingText) el.findingText.disabled = true;
+    const hasText = !!(el.findingText?.value || '').trim();
+    if (!hasText) { finalizeTurn(false); return; }
+    showFeedback('Tiempo acabado: responde Sí/No y pulsa "Siguiente turno".', FEEDBACK.INFO, true);
+    if (el.btnYes) el.btnYes.disabled = false;
+    if (el.btnNo)  el.btnNo.disabled  = false;
+  }
+
+  function onAnswerYesNo(answer) {
+    if (!state.turnActive) return;
+    state.currentAnswer = answer;
+    el.btnYes?.classList.toggle('active', answer === ANSWER.YES);
+    el.btnNo?.classList.toggle('active',  answer === ANSWER.NO);
+    showFeedback(`Respuesta registrada: ${answer}.`, FEEDBACK.INFO);
+    if (el.btnNextTurn) el.btnNextTurn.disabled = false;
+  }
+
+  function onNextTurn() {
+    if (!state.turnActive) { showFeedback('Debes seleccionar cartas primero.', FEEDBACK.ERROR); return; }
+    const text = (el.findingText?.value || '').trim();
+    if (!state.currentAnswer) {
+      if (el.btnYes?.classList.contains('active')) state.currentAnswer = ANSWER.YES;
+      else if (el.btnNo?.classList.contains('active')) state.currentAnswer = ANSWER.NO;
+    }
+    if (!text) { finalizeTurn(false); return; }
+    if (!state.currentAnswer) { showFeedback('Responde la pregunta Sí/No antes de continuar.', FEEDBACK.INFO); return; }
+    finalizeTurn(true);
+  }
+
+  function onGoToPhase2() {
+    if (state.findings.length < 1) { showFeedback('Registra al menos 1 hallazgo para pasar a la Fase 2.', FEEDBACK.ERROR); return; }
+    const hasUnsaved = state.turnActive && !!(el.findingText?.value || '').trim();
+    if (hasUnsaved && !confirm('Hay un hallazgo en edición que se perderá. ¿Deseas continuar?')) return;
+    if (state.turnActive) { timer.stop(); resetPhase1Board(); }
+    startPhase2();
+  }
+
+  function onDrawStar() {
+    if (state.phase2SelectedIndex === null) { showFeedback('Extrae un hallazgo primero.', FEEDBACK.ERROR); return; }
+    if (!state.starPool.length) { showFeedback('No quedan cartas en el mazo de clasificación.', FEEDBACK.ERROR); return; }
+    const card = drawRandom(state.starPool);
+    if (!card?.question) { showFeedback('Error al extraer la carta.', FEEDBACK.ERROR); return; }
+    // Rellenar y voltear carta ★
+    if (el.cardBackStarText) el.cardBackStarText.textContent = card.question;
+    if (el.card3dStar) el.card3dStar.classList.add('flipped');
+    // Mostrar pregunta en el centro
+    if (el.revealedStar) {
+      el.revealedStar.innerHTML = '';
+      const strong = document.createElement('strong'); strong.textContent = card.question;
+      const spacer = document.createElement('div');   spacer.style.height = '6px';
+      const em     = document.createElement('em');    em.textContent = card.clarification || '';
+      el.revealedStar.appendChild(strong);
+      el.revealedStar.appendChild(spacer);
+      el.revealedStar.appendChild(em);
+    }
+    if (el.phase2StarWrap) el.phase2StarWrap.style.display = 'block';
+    if (el.btnDrawStar) el.btnDrawStar.disabled = true;
+    setupVoting();
+    showFeedback('Carta revelada. Inicien la votación.', FEEDBACK.INFO);
+  }
+
+  function setupVoting() {
+    if (!el.votersList) return;
+    el.votersList.innerHTML = '';
+    // 2 columnas si hay más de 4 jugadores
+    el.votersList.className = state.players.length > 4 ? 'voters-list two-col' : 'voters-list';
+    state.players.forEach((name, i) => {
+      const row = document.createElement('div');
+      row.className = 'vote-switch-row';
+      const nameSpan = document.createElement('span');
+      nameSpan.className = 'vote-player-name';
+      nameSpan.textContent = name;
+      // Toggle switch
+      const lbl   = document.createElement('label'); lbl.className = 'vote-toggle';
+      const chk   = document.createElement('input'); chk.type = 'checkbox'; chk.dataset.playerIndex = String(i);
+      chk.addEventListener('change', updateVoteCounts);
+      const track = document.createElement('div');  track.className = 'vote-track';
+      const noH   = document.createElement('span'); noH.className = 'vote-half no'; noH.textContent = 'No';
+      const siH   = document.createElement('span'); siH.className = 'vote-half si'; siH.textContent = 'Sí';
+      const thumb = document.createElement('div');  thumb.className = 'vote-thumb';
+      track.appendChild(noH); track.appendChild(siH); track.appendChild(thumb);
+      lbl.appendChild(chk);   lbl.appendChild(track);
+      row.appendChild(nameSpan); row.appendChild(lbl);
+      el.votersList.appendChild(row);
+    });
+    if (el.countYes) el.countYes.textContent = '0';
+    if (el.countNo)  el.countNo.textContent  = String(state.players.length);
+    if (el.votingArea)      el.votingArea.style.display      = 'block';
+    if (el.btnFinalizeVote) el.btnFinalizeVote.disabled      = false;
+    if (el.phase2Result)    el.phase2Result.innerHTML        = '';
+  }
+
+  function updateVoteCounts() {
+    const checks = el.votersList?.querySelectorAll('input[type="checkbox"]') || [];
+    const yes    = Array.from(checks).filter(c => c.checked).length;
+    // Row highlight
+    checks.forEach(chk => {
+      chk.closest('.vote-switch-row')?.classList.toggle('yes', chk.checked);
+    });
+    if (el.countYes) el.countYes.textContent = String(yes);
+    if (el.countNo)  el.countNo.textContent  = String(state.players.length - yes);
+  }
+
+  function onFinalizeVote() {
+    const checks = el.votersList?.querySelectorAll('input[type="checkbox"]') || [];
+    const yes    = Array.from(checks).filter(c => c.checked).length;
+    const no     = state.players.length - yes;
+    const decision = yes >= no ? ANSWER.YES : ANSWER.NO;
+    el.votersList?.querySelectorAll('input').forEach(i => i.disabled = true);
+    if (el.btnFinalizeVote) el.btnFinalizeVote.disabled = true;
+    if (el.phase2Result) {
+      el.phase2Result.innerHTML = '';
+      const badge = document.createElement('div');
+      badge.className   = 'result-badge';
+      badge.textContent = `Decisión: ${decision}  (Sí: ${yes} — No: ${no})`;
+      el.phase2Result.appendChild(badge);
+    }
+    showFeedback(`Decisión final: ${decision}.`, FEEDBACK.SUCCESS);
+    if (state.phase2SelectedIndex !== null) {
+      const entryIndex = state.phase2Order[state.phase2SelectedIndex];
+      const finding    = state.findings[entryIndex];
+      finding.processed      = true;
+      finding.classification = { decision, yesCount: yes, noCount: no };
+      finding.phase2Score    = decision === ANSWER.YES ? 1 : 0;
+      finding.finalScore     = finding.puntaje * finding.phase2Score;
+    }
+    setTimeout(() => {
+      renderPhase2Cards(); // un-flips cards, resets center, re-enables extract button
+      const remaining = state.findings.filter(f => !f.processed).length;
+      if (remaining === 0) {
+        showFeedback('Todos los hallazgos procesados. Calculando resultados…', FEEDBACK.INFO, true);
+        setTimeout(() => { renderResults(); showScreen('results'); const totals=Object.fromEntries(state.players.map(p=>[p,0])); state.findings.forEach(f=>{if(typeof f.finalScore==='number')totals[f.jugador]=(totals[f.jugador]||0)+f.finalScore;}); const scores=Object.values(totals); const topScore=scores.length?Math.max(...scores):0; const winnersCount=scores.filter(s=>s===topScore).length; posthog.capture('results_reached',{winners_count:winnersCount}); }, 500);
+      } else {
+        showFeedback(`${remaining} hallazgo(s) restante(s) por clasificar.`, FEEDBACK.INFO, true);
+      }
+    }, 900);
+  }
+
+  function goHome() { resetGameState(); showScreen('home'); }
+
+  // ─── CONFIRM EXIT MODAL ────────────────────────────────────────────────────
+
+  const confirmOverlay = document.getElementById('confirm-exit-overlay');
+
+  function confirmGoHome() {
+    if (confirmOverlay) confirmOverlay.hidden = false;
+  }
+  function closeConfirm() {
+    if (confirmOverlay) confirmOverlay.hidden = true;
+  }
+
+  // ─── INIT ──────────────────────────────────────────────────────────────────
+
+  function init() {
+    initRefs();
+    el.btnStartHome?.addEventListener('click', startNewGame);
+    el.btnBack?.addEventListener('click', confirmGoHome);
+    el.btnAddPlayer?.addEventListener('click', onAddPlayer);
+    el.playerNameInput?.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); onAddPlayer(); } });
+    el.btnStartGame?.addEventListener('click', startPhase1);
+    el.orgNameInput?.addEventListener('input', updateStartButton);
+    el.orgTypeSelect?.addEventListener('change', onOrgTypeChange);
+    el.orgTypeOtherInput?.addEventListener('input', updateStartButton);
+    el.btnSelectCards?.addEventListener('click', onSelectCards);
+    el.btnYes?.addEventListener('click', () => onAnswerYesNo(ANSWER.YES));
+    el.btnNo?.addEventListener('click',  () => onAnswerYesNo(ANSWER.NO));
+    el.btnNextTurn?.addEventListener('click', onNextTurn);
+    el.btnGoPhase2?.addEventListener('click', onGoToPhase2);
+    el.btnExtractFinding?.addEventListener('click', onExtractFinding);
+    el.btnDrawStar?.addEventListener('click', onDrawStar);
+    el.btnFinalizeVote?.addEventListener('click', onFinalizeVote);
+    el.btnBackToHome?.addEventListener('click', confirmGoHome);
+    el.btnBackToHome2?.addEventListener('click', confirmGoHome);
+    el.btnBackToHomeP1?.addEventListener('click', confirmGoHome);
+    el.btnPrint?.addEventListener('click', () => window.print());
+    // Modal buttons
+    document.getElementById('confirm-exit-ok')?.addEventListener('click', () => { closeConfirm(); goHome(); });
+    document.getElementById('confirm-exit-cancel')?.addEventListener('click', closeConfirm);
+    document.getElementById('confirm-exit-cancel2')?.addEventListener('click', closeConfirm);
+    // Close on overlay click
+    confirmOverlay?.addEventListener('click', e => { if (e.target === confirmOverlay) closeConfirm(); });
+    // Close on Escape
+    document.addEventListener('keydown', e => { if (e.key === 'Escape' && !confirmOverlay?.hidden) closeConfirm(); });
+    resetAllPools();
+    showScreen('home');
+    resetGameState();
+  }
+
+  document.addEventListener('DOMContentLoaded', init);
+})();
+  </script>
+</body>
+</html>
