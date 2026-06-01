@@ -1,0 +1,1287 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Winners &amp; Qualifiers</title>
+  <style>
+:root{
+  --bg:#f6f7fb;
+  --card:#ffffff;
+  --accent:#0b66ff;
+  --muted:#555;
+  --radius:10px;
+  --max-width:980px;
+  --error:#d64545;
+  --success:#2a9d8f;
+  --info:#0b66ff;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;
+  background:linear-gradient(180deg,#eef2ff 0%,var(--bg) 100%);
+  color:#222;
+  display:flex;
+  align-items:flex-start;
+  justify-content:center;
+  min-height:100vh;
+  padding:28px 12px;
+}
+.app{
+  width:100%;
+  max-width:var(--max-width);
+  background:var(--card);
+  border-radius:var(--radius);
+  box-shadow:0 10px 30px rgba(19,35,79,0.08);
+  padding:28px;
+  padding-top:48px;
+  position:relative;
+}
+.screen{ display:none; position:relative; }
+.screen.visible{ display:block; }
+.close-btn{
+  position:absolute;
+  top:12px;
+  right:12px;
+  background:transparent;
+  border:0;
+  font-size:20px;
+  line-height:1;
+  cursor:pointer;
+  color:var(--muted);
+  padding:6px;
+  border-radius:6px;
+}
+.close-btn:hover{ background:rgba(0,0,0,0.04); color:#111; }
+.app-header{
+  position: static;
+  z-index: auto;
+  background: transparent;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:6px 0 18px 0;
+  margin: 0 0 8px 0;
+  pointer-events: auto;
+}
+.app-header h1{ margin:0; font-size:1.6rem; color:var(--accent); text-align:center; pointer-events: auto; }
+.screen-title{ margin-top:0; margin-bottom:12px; font-size:1.15rem; color:#1b2746; }
+.instruction{ background:#f1f7ff; border:1px solid #e6f0ff; padding:10px 12px; border-radius:8px; color:#0b66ff; margin-bottom:12px; }
+.tagline{ font-weight:600; font-size:1.05rem; margin:8px 0; } .credit{ color:var(--muted); margin-bottom:12px; }
+.actions{ margin-top:14px; display:flex; gap:10px; align-items:center; }
+button{ padding:10px 14px; border-radius:8px; border:1px solid rgba(0,0,0,0.08); background:white; cursor:pointer; }
+button.primary{ background:var(--accent); color:white; border:none; } button:disabled{ opacity:0.55; cursor:not-allowed; }
+.input-row{ display:flex; gap:8px; align-items:center; margin-top:8px; } input[type="text"]{ flex:1; padding:10px 12px; border-radius:8px; border:1px solid #d8dbe8; font-size:1rem; }
+select{ padding:10px 12px; border-radius:8px; border:1px solid #d8dbe8; font-size:1rem; background:white; }
+.small{ font-size:0.9rem; color:var(--muted); } .feedback{ margin-top:10px; font-size:0.95rem; } .feedback.error{ color:var(--error); } .feedback.info{ color:var(--info); } .feedback.success{ color:var(--success); }
+
+/* guidance & temporary badge */
+.guidance{
+  margin-top:10px;
+  padding:10px 12px;
+  border-radius:8px;
+  background:#fff8f0;
+  border:1px solid #ffe8d6;
+  color:#6b4b00;
+  font-size:0.95rem;
+  line-height:1.3;
+}
+.temp-badge{
+  display:inline-block;
+  margin-left:8px;
+  padding:6px 10px;
+  border-radius:999px;
+  background:#eef6ff;
+  color:var(--accent);
+  font-weight:700;
+  font-size:0.95rem;
+  vertical-align:middle;
+  transition:opacity .24s ease;
+  opacity:0;
+}
+.temp-badge.visible{ opacity:1; }
+
+/* Phase 1 / Phase 2 styles */
+.phase1-row{ display:flex; gap:20px; align-items:flex-start; margin-bottom:12px; flex-wrap:wrap; }
+.deck{ width:45%; display:flex; flex-direction:column; align-items:center; gap:8px; }
+.deck-face{ width:120px; height:120px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:2.8rem; box-shadow:0 6px 18px rgba(11,102,255,0.08); }
+.deck-face-closed{ background:linear-gradient(180deg,#fff 0%,#f2f8ff 100%); border:2px dashed rgba(11,102,255,0.12); color:var(--accent); }
+.deck-label{ color:var(--muted); font-weight:600; }
+.revealed{ min-height:56px; padding:8px 10px; width:100%; text-align:left; border-radius:8px; background:#fbfdff; border:1px solid #eef2ff; color:#0d1730; font-size:0.95rem; white-space: pre-line; }
+.timer{ font-weight:700; color:var(--accent); padding:6px 10px; border-radius:8px; background:#f1f7ff; }
+.phase1-inputs textarea{ width:100%; padding:10px; border-radius:8px; border:1px solid #d8dbe8; resize:vertical; font-size:1rem; margin-top:8px; }
+.yesno-block{ display:flex; flex-direction:column; align-items:flex-start; gap:8px; margin-top:10px; width:100%; }
+.question-text{ color:#1b2746; font-weight:600; } .yesno-buttons{ display:flex; gap:8px; } .yesno-buttons button{ padding:8px 12px; border-radius:8px; } .yesno-buttons button.active{ background:var(--accent); color:#fff; border:none; }
+
+/* phase2 cards */
+.hallazgos-wrap{ display:flex; gap:10px; flex-wrap:wrap; margin-top:12px; }
+.hallazgo-card{ width:calc(20% - 10px); min-width:120px; background:#fff; border:1px solid #e6eefc; border-radius:8px; padding:12px; box-shadow:0 6px 14px rgba(11,102,255,0.04); cursor:pointer; display:flex; align-items:center; justify-content:center; height:92px; }
+.hallazgo-card.number-only{ font-weight:700; font-size:1.4rem; color:var(--accent); text-align:center; }
+.hallazgo-card.revealed{ align-items:flex-start; justify-content:flex-start; cursor:default; height:auto; padding:12px; display:block; }
+.hallazgo-card.revealed h4{ margin:0 0 6px 0; font-size:1rem; color:#0b66ff; }
+.hallazgo-card.revealed p{ margin:0; font-size:0.95rem; color:#0d1730; line-height:1.3; white-space:pre-wrap; overflow:visible; max-height:none; }
+.hallazgo-card.locked{ opacity:0.45; cursor:default; border:1px dashed #cfe0ff; background:#f4f6fb; min-height:92px; display:flex; align-items:center; justify-content:center; color:transparent; }
+
+/* star deck */
+.star-deck{ display:flex; gap:16px; align-items:center; margin-top:10px; }
+.star-card{ width:120px; height:120px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:2.4rem; background:linear-gradient(180deg,#fffef8 0%,#fff6e0 100%); border:2px solid #ffe9a8; color:#f1b500; box-shadow:0 8px 20px rgba(241,181,0,0.08); }
+.revealed-star{ min-height:48px; padding:8px 10px; width:100%; text-align:left; border-radius:8px; background:#fffaf1; border:1px solid #fff0d9; color:#6b4b00; font-size:0.95rem; white-space: pre-line; }
+
+/* voting */
+.voting-area{ margin-top:12px; display:flex; gap:16px; flex-wrap:wrap; align-items:flex-start; } .voters-list{ display:flex; flex-direction:column; gap:6px; } .voter-row{ display:flex; gap:8px; align-items:center; } .voter-row input{ width:18px; height:18px; }
+.result-badge{ padding:6px 10px; border-radius:8px; background:#f1f7ff; color:var(--accent); font-weight:700; }
+
+/* results */
+.results-wrap{ margin-top:12px; } .results-table{ width:100%; border-collapse:collapse; } .results-table th, .results-table td{ padding:8px; border-bottom:1px solid #eef2ff; text-align:left; }
+
+.final-report{ margin-top:18px; display:flex; gap:24px; flex-wrap:wrap; align-items:flex-start; }
+.final-table{ width:48%; min-width:280px; border:1px solid #eef2ff; border-radius:8px; padding:10px; background:#fff; box-shadow:0 6px 18px rgba(11,102,255,0.03); }
+.final-table h3{ margin:0 0 8px 0; color:#0b66ff; }
+.final-table table{ width:100%; border-collapse:collapse; }
+.final-table th, .final-table td{ padding:6px 8px; border-bottom:1px solid #f1f5ff; text-align:left; }
+
+.print-actions{ margin-top:12px; }
+
+/* --- Home screen customizations requested --- */
+#screen-home .home-text { text-align:center; }
+#screen-home .actions { justify-content:center; pointer-events:auto; }
+#btn-start-home.primary {
+  font-size:1.15rem;
+  padding:14px 22px;
+  border-radius:12px;
+  min-width:160px;
+  box-shadow: 0 8px 20px rgba(11,102,255,0.12);
+}
+
+/* Credits grid */
+.credits-grid{
+  display:grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap:20px;
+  margin-top:14px;
+  align-items:start;
+}
+.credits-column{
+  text-align:left;
+}
+.credits-column h4{ margin:0 0 8px 0; font-size:1rem; color:#000; }
+.credits-column ul{ margin:0; padding-left:18px; }
+.credits-column li{ text-align:left; margin-bottom:6px; }
+.credits-column a{ color:var(--accent); text-decoration:none; }
+.credits-column a:hover{ text-decoration:underline; }
+
+/* Attribution notice */
+.attribution{
+  margin-top:14px;
+  padding:12px;
+  border-radius:8px;
+  background:#fff8f5;
+  border:1px solid #fdeedb;
+  color:var(--muted);
+  font-size:0.95rem;
+  line-height:1.35;
+}
+
+/* Players screen specific */
+.players-section-row{ display:flex; flex-direction:column; gap:10px; margin-bottom:8px; }
+.form-field { display:flex; flex-direction:column; gap:6px; text-align:left; max-width:520px; margin:0 auto; }
+.form-field label{ font-weight:600; color:#1b2746; }
+.conditional { display:none; }
+
+@media (max-width:920px){ .hallazgo-card{ width:calc(33.333% - 10px); } .final-table{ width:100%; } }
+@media (max-width:640px){
+  .phase1-row{ flex-direction:column; } .deck{ width:100%; } .hallazgo-card{ width:calc(50% - 10px); } .app{ padding:18px; padding-top:48px; } .app-header{ margin:-48px 0 8px 0; }
+  .credits-grid{ grid-template-columns: 1fr; }
+}
+  </style>
+</head>
+<body>
+  <main class="app" role="main">
+    <header class="app-header"><h1 id="app-title">Winners &amp; Qualifiers</h1></header>
+
+    <section id="screen-home" class="screen visible" aria-label="Inicio">
+      <button class="close-btn" style="display:none;">×</button>
+      <div class="home-text">
+        <p class="tagline">El juego que revela los tesoros ocultos de tu organización.</p>
+
+        <div class="actions">
+          <button id="btn-start-home" class="primary" type="button" aria-label="Empezar">Empezar</button>
+        </div>
+
+        <p class="credit">Diseñado por el Semillero de investigación en Estrategia Organizacional — EAFIT, 2025</p>
+
+        <h3 class="screen-title">Introducción</h3>
+        <p>Winners &amp; Qualifiers ayuda a los equipos a identificar recursos y capacidades tácitas con potencial estratégico.</p>
+
+        <!-- Integrantes -->
+        <h3 class="screen-title" style="margin-top:18px;">Integrantes</h3>
+
+        <div class="credits-grid" role="group" aria-label="Estudiantes y Profesores">
+          <!-- Columna Estudiantes -->
+          <div class="credits-column" aria-labelledby="estudiantes-head">
+            <h4 id="estudiantes-head">Estudiantes</h4>
+            <ul>
+              <li><a href="https://www.linkedin.com/in/paulmoscosov" target="_blank" rel="noopener noreferrer">Paul Moscoso V.</a></li>
+              <li><a href="https://www.linkedin.com/in/mateo-valencia-hincapíe" target="_blank" rel="noopener noreferrer">Mateo Valencia Hincapié</a></li>
+              <li><a href="https://www.linkedin.com/in/daniel-tamayo-79a4351b8/" target="_blank" rel="noopener noreferrer">Daniel Tamayo</a></li>
+              <li><a href="https://www.linkedin.com/in/ana-maria-gomez-mesa-1793462a3/" target="_blank" rel="noopener noreferrer">Ana Gómez</a></li>
+            </ul>
+          </div>
+
+          <!-- Columna Profesores -->
+          <div class="credits-column" aria-labelledby="profesores-head">
+            <h4 id="profesores-head">Profesores</h4>
+            <ul>
+              <li><a href="https://www.linkedin.com/in/martha-eugenia-reyes-sarmiento-194b9099/" target="_blank" rel="noopener noreferrer">Martha Reyes Sarmiento</a></li>
+              <li><a href="https://www.linkedin.com/in/jmaciasp/" target="_blank" rel="noopener noreferrer">John Macías</a></li>
+              <li><a href="https://www.eafit.edu.co/nuestros-profesores/jorge-ivan-velez-castiblanco" target="_blank" rel="noopener noreferrer">Jorge Iván Vélez Castiblanco</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="attribution" role="note" aria-live="polite">
+          Aviso de atribución: El uso, modificación o redistribución de esta herramienta, sus materiales asociados o resultados derivados requiere la debida atribución a los miembros del equipo arriba indicados y a la Universidad EAFIT. Se recomienda la siguiente forma de cita mínima: “Semillero de investigación en estrategia, Universidad EAFIT (2025).” Además, cuando proceda, incluya los nombres de los autores responsables y un enlace a la fuente original.
+        </div>
+      </div>
+    </section>
+
+    <section id="screen-players" class="screen" aria-labelledby="players-title">
+      <button class="close-btn" title="Cancelar juego">×</button>
+      <h2 id="players-title" class="screen-title">Ingresar datos de partida</h2>
+
+      <div class="players-section-row">
+        <div class="form-field" id="org-fields">
+          <label for="org-name">Organización <span aria-hidden="true" style="color:#d64545">*</span></label>
+          <input id="org-name" name="org-name" type="text" placeholder="Nombre de la organización" autocomplete="organization" />
+
+          <label for="org-type">Tipo de organización <span aria-hidden="true" style="color:#d64545">*</span></label>
+          <select id="org-type" name="org-type" aria-required="true">
+            <option value="">-- Seleccione una opción --</option>
+            <option value="Empresa familiar">Empresa familiar</option>
+            <option value="Emprendimiento">Emprendimiento</option>
+            <option value="Mipyme">Mipyme</option>
+            <option value="Empresa consolidada">Empresa consolidada</option>
+            <option value="Otra">Otra</option>
+          </select>
+
+          <div id="org-type-other-wrap" class="conditional">
+            <label for="org-type-other">Si eligió "Otra", detallar</label>
+            <input id="org-type-other" name="org-type-other" type="text" placeholder="Detalle del tipo de organización" />
+          </div>
+        </div>
+      </div>
+
+      <h2 id="players-section-title" class="screen-title" style="margin-top:6px;">Nombre del jugador</h2>
+
+      <form id="form-add-player" onsubmit="return false;">
+        <label for="player-name">Nombre del jugador</label>
+        <div class="input-row"><input id="player-name" name="player-name" type="text" placeholder="Ej. María" autocomplete="off" /><button id="btn-add-player" type="button">Agregar</button></div>
+      </form>
+
+      <div class="players-list">
+        <h3 id="players-list-title">Jugadores añadidos (0/10)</h3>
+        <ul id="players-ul" aria-live="polite"></ul>
+        <p id="players-note" class="small">Se requieren entre 4 y 10 jugadores para comenzar el juego. Además, complete los datos de partida arriba.</p>
+        <p id="player-feedback" class="feedback" role="status" aria-live="polite"></p>
+      </div>
+
+      <div class="actions"><button id="btn-back" type="button">Volver</button><button id="btn-start-game" class="primary" type="button" disabled>Comenzar juego</button></div>
+    </section>
+
+    <section id="screen-phase1" class="screen" aria-labelledby="phase1-title">
+      <button class="close-btn" title="Cancelar juego">×</button>
+      <h2 id="phase1-title" class="screen-title">Fase de exploración — <span id="current-player-name"></span><span id="tipo-detected" class="temp-badge" aria-live="polite"></span></h2>
+
+      <p class="instruction" id="phase1-instruction">
+        Tienes 5 minutos para identificar un recurso o capacidad a partir de las cartas seleccionadas al azar.
+        Pulsa "Seleccionar cartas" para revelar una carta de Preguntas y otra de Características; se activará el temporizador
+        y podrás redactar tu hallazgo. Responde a la pregunta Sí/No relacionada con la característica y pulsa "Siguiente turno"
+        para finalizar antes de que expire el tiempo.
+      </p>
+
+      <div class="guidance" id="phase1-guidance">
+        Recurso: todo lo que la organización posee. Siempre empieza por un sustantivo.
+        <br>
+        Capacidad: todo lo que la organización hace con lo que posee. Siempre empieza por un verbo en infinitivo.
+      </div>
+
+      <div class="phase1-row">
+        <div class="deck" id="deck-questions" title="Mazo de preguntas">
+          <div class="deck-face deck-face-closed">?</div><div class="deck-label">Preguntas</div>
+          <div class="revealed" id="revealed-question">—</div>
+        </div>
+
+        <div class="deck" id="deck-features" title="Mazo de características">
+          <div class="deck-face deck-face-closed">!</div><div class="deck-label">Características</div>
+          <div class="revealed" id="revealed-feature">—</div>
+        </div>
+      </div>
+
+      <div class="phase1-actions">
+        <button id="btn-select-cards" class="primary" type="button">Seleccionar cartas</button>
+        <div id="timer-display" class="timer">00:00</div>
+      </div>
+
+      <div class="phase1-inputs">
+        <label for="finding-text">Redacta tu hallazgo</label>
+        <textarea id="finding-text" placeholder="Describe un recurso o una capacidad..." rows="4" disabled></textarea>
+
+        <div class="yesno-block" aria-live="polite">
+          <div class="question-text" id="question-text">Pregunta: —</div>
+          <div class="yesno-buttons"><button id="btn-answer-yes" type="button" disabled aria-label="Responder Sí">Sí</button><button id="btn-answer-no" type="button" disabled aria-label="Responder No">No</button></div>
+        </div>
+
+        <div class="actions" style="margin-top:12px;"><button id="btn-next-turn" type="button" disabled>Siguiente turno</button></div>
+      </div>
+
+      <div class="phase1-table-wrap" aria-hidden="true" style="display:none;">
+        <h3>Registro de puntajes (Fase 1)</h3>
+        <table id="phase1-table" class="striped">
+          <thead><tr><th>Jugador</th><th>Hallazgo</th><th>Tipo</th><th>Respuesta F1</th><th>Pregunta F1</th><th>Característica</th><th>Puntaje F1</th><th>Clasificación F2</th><th>Puntaje F2</th><th>Puntaje Final</th></tr></thead>
+          <tbody></tbody>
+        </table>
+        <div style="margin-top:12px;"><button id="btn-go-phase2" type="button" class="primary" style="display:none;">Ir a Fase 2</button></div>
+      </div>
+    </section>
+
+    <section id="screen-phase2" class="screen" aria-labelledby="phase2-title">
+      <button class="close-btn" title="Cancelar juego">×</button>
+      <h2 id="phase2-title" class="screen-title">Fase de clasificación — <span id="phase2-current-player"></span></h2>
+      <p class="instruction" id="phase2-instruction">Todos los jugadores participan democráticamente: para el hallazgo seleccionado se vota Sí o No. En empate, el "Sí" prevalece.</p>
+
+      <div style="margin-top:12px;"><strong>1) Selecciona UN hallazgo (se bloqueará la selección)</strong><div class="hallazgos-wrap" id="phase2-hallazgos"></div></div>
+
+      <div style="margin-top:14px;"><strong>2) Mazo de clasificación</strong>
+        <div class="star-deck"><div class="star-card">★</div><div class="revealed-star" id="revealed-star">—</div><div style="margin-left:8px;"><button id="btn-draw-star" class="primary" type="button" disabled>Seleccionar carta de clasificación</button></div></div>
+      </div>
+
+      <div class="voting-area" id="voting-area" style="display:none;">
+        <div><strong>Instrucciones de votación</strong><p class="small">Marca a los jugadores que votan "Sí". En empate, el "Sí" gana automáticamente.</p></div>
+        <div class="voters-list" id="voters-list"></div>
+        <div style="min-width:220px;"><div style="margin-bottom:8px;"><strong>Totales</strong></div><div style="display:flex; gap:8px; align-items:center;"><div class="result-badge">Sí: <span id="count-yes">0</span></div><div class="result-badge">No: <span id="count-no">0</span></div></div>
+          <div style="margin-top:10px;"><button id="btn-finalize-vote" type="button" class="primary" disabled>Finalizar decisión</button></div>
+          <div id="phase2-result" style="margin-top:12px;"></div>
+        </div>
+      </div>
+
+      <div style="margin-top:18px;"><button id="btn-back-to-home" type="button">Volver al inicio</button></div>
+    </section>
+
+    <section id="screen-results" class="screen" aria-labelledby="results-title">
+      <button class="close-btn" title="Cancelar juego">×</button>
+      <h2 id="results-title" class="screen-title">Resultados finales</h2>
+
+      <!-- NEW: Organización y Tipo mostrados antes de la tabla de puntajes -->
+      <div id="results-org" class="small" aria-live="polite" style="margin-bottom:10px; color:var(--muted);"></div>
+
+      <div class="results-wrap" id="results-wrap">
+        <table class="results-table" id="results-table">
+          <thead>
+            <tr><th>Posición</th><th>Jugador</th><th>Puntaje final</th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+
+      <div class="final-report" id="final-report">
+        <div class="final-table" id="winners-table-wrap"><h3>Winners</h3><table id="winners-table"><thead><tr><th>Hallazgo</th><th>Tipo</th><th>Nota</th></tr></thead><tbody></tbody></table></div>
+        <div class="final-table" id="qualifiers-table-wrap"><h3>Qualifiers</h3><table id="qualifiers-table"><thead><tr><th>Hallazgo</th><th>Tipo</th><th>Nota</th></tr></thead><tbody></tbody></table></div>
+      </div>
+
+      <div class="print-actions"><button id="btn-print-results" class="primary" type="button">Imprimir pantalla</button></div>
+
+      <div style="margin-top:16px;"><button id="btn-back-to-home-2" type="button">Volver al inicio</button></div>
+    </section>
+  </main>
+
+  <script>
+(function(){
+  'use strict';
+
+  // safety helper to avoid unhandled errors when appendChild fails at runtime
+  function appendSafe(parent, child){
+    try{
+      if(!parent){
+        console.error('[WQ] appendSafe: parent is null/undefined', parent, child);
+        return false;
+      }
+      if(typeof parent.appendChild !== 'function'){
+        console.error('[WQ] appendSafe: parent.appendChild not a function', parent, child);
+        return false;
+      }
+      parent.appendChild(child);
+      return true;
+    }catch(err){
+      console.error('[WQ] appendSafe caught appendChild error', err, parent, child);
+      return false;
+    }
+  }
+
+  // --- configuración y estado centralizado ---
+  const MIN_PLAYERS = 4;
+  const MAX_PLAYERS = 10;
+  const PHASE1_TARGET_ENTRIES = 10;
+
+  const appState = {
+    players: [],
+    phase1Entries: [],
+    currentPlayerIndex: 0,
+    questionsDeckAvailable: [],
+    featuresDeckAvailable: [],
+    starDeckAvailable: [],
+    selectionActive: false,
+    currentQuestion: null,
+    currentFeature: null,
+    currentAnswer: null,
+    timerRef: null,
+    remainingSeconds: 0,
+    phase2Order: [],
+    phase2SelectedIndex: null,
+    phase2StarCard: null,
+    // store partida data
+    orgName: '',
+    orgType: '',
+    orgTypeOther: ''
+  };
+
+  // --- questionsDeck aprobado (INMUTABLE) ---
+  const questionsDeck = Object.freeze([
+    Object.freeze({ category: "Conocimiento tácito", text: "¿Qué truco usas en tu trabajo que no está escrito en ningún manual?" }),
+    Object.freeze({ category: "Conocimiento tácito", text: "Si alguien nuevo llega a tu puesto, ¿qué consejo le darías para no equivocarse?" }),
+    Object.freeze({ category: "Conocimiento tácito", text: "¿Qué es lo más difícil de explicar de tu trabajo, pero que tú ya lo haces en automático?" }),
+    Object.freeze({ category: "Conocimiento tácito", text: "¿Qué detalle pequeño marca la diferencia en hacerlo bien?" }),
+    Object.freeze({ category: "Conocimiento tácito", text: "¿Qué error cometiste una vez que nunca olvidarás y qué aprendiste?" }),
+    Object.freeze({ category: "Conocimiento tácito", text: "¿Qué cosa aprendiste mirando a otro y nunca lo viste en un curso?" }),
+    Object.freeze({ category: "Conocimiento tácito", text: "¿Qué actividad haces con “tu estilo propio” que otros imitan?" }),
+    Object.freeze({ category: "Conocimiento tácito", text: "¿Qué tarea solo tú sabes hacer de cierta forma que asegura el resultado?" }),
+    Object.freeze({ category: "Relaciones y redes informales", text: "Cuando tienes un problema urgente, ¿a quién llamas primero y por qué?" }),
+    Object.freeze({ category: "Relaciones y redes informales", text: "¿Quién, fuera de tu área, te ha salvado de un apuro más de una vez?" }),
+    Object.freeze({ category: "Relaciones y redes informales", text: "¿Con qué persona externa (proveedor, cliente, contacto) tenemos un puente clave?" }),
+    Object.freeze({ category: "Relaciones y redes informales", text: "¿Qué relación personal facilita que un proceso avance sin trabas?" }),
+    Object.freeze({ category: "Relaciones y redes informales", text: "¿Qué conversación de pasillo o café evita más problemas que una reunión formal?" }),
+    Object.freeze({ category: "Relaciones y redes informales", text: "¿Quién es tu “gurú” interno, al que consultas cuando nada funciona?" }),
+    Object.freeze({ category: "Relaciones y redes informales", text: "¿Qué cliente o aliado confía en ti más allá de lo que dice el contrato?" }),
+    Object.freeze({ category: "Relaciones y redes informales", text: "¿Quién tiene un conocimiento que no figura en su cargo oficial?" }),
+    Object.freeze({ category: "Rutinas y costumbres colectivas", text: "¿Qué costumbre de tu equipo hace que todo fluya mejor?" }),
+    Object.freeze({ category: "Rutinas y costumbres colectivas", text: "¿Qué pequeño ritual (reunión corta, saludo, checklist informal) sostiene el trabajo?" }),
+    Object.freeze({ category: "Rutinas y costumbres colectivas", text: "¿Qué rutina heredaste de un compañero anterior que aún usas?" }),
+    Object.freeze({ category: "Rutinas y costumbres colectivas", text: "¿Qué práctica repiten todos aunque nunca fue ordenada por la gerencia?" }),
+    Object.freeze({ category: "Rutinas y costumbres colectivas", text: "¿Qué gesto o hábito mantiene motivado al equipo?" }),
+    Object.freeze({ category: "Rutinas y costumbres colectivas", text: "¿Qué cosa hacen “siempre igual” porque funciona, aunque nadie sabe quién lo inventó?" }),
+    Object.freeze({ category: "Rutinas y costumbres colectivas", text: "¿Qué momento del día es clave para coordinarse sin que esté en la agenda?" }),
+    Object.freeze({ category: "Rutinas y costumbres colectivas", text: "¿Qué práctica informal evita que haya errores grandes?" }),
+    Object.freeze({ category: "Intuiciones y toma de decisiones", text: "¿Qué señales te dicen que algo va a salir mal antes de que pase?" }),
+    Object.freeze({ category: "Intuiciones y toma de decisiones", text: "¿Qué sabes detectar mejor que una máquina o un reporte?" }),
+    Object.freeze({ category: "Intuiciones y toma de decisiones", text: "¿Cómo decides rápido cuando no tienes toda la información?" }),
+    Object.freeze({ category: "Intuiciones y toma de decisiones", text: "¿Qué “olfato” has desarrollado con la experiencia?" }),
+    Object.freeze({ category: "Intuiciones y toma de decisiones", text: "¿Qué ejemplo recuerdas de haber resuelto algo con intuición más que con datos?" }),
+    Object.freeze({ category: "Intuiciones y toma de decisiones", text: "¿Qué indicador no oficial usas para saber que el trabajo va bien?" }),
+    Object.freeze({ category: "Intuiciones y toma de decisiones", text: "¿Qué regla no escrita sigues cuando hay presión?" }),
+    Object.freeze({ category: "Intuiciones y toma de decisiones", text: "¿Qué decisión tomas distinto a como lo haría alguien nuevo?" }),
+    Object.freeze({ category: "Vulnerabilidades y resiliencia", text: "Si mañana no vinieras, ¿qué dejaría de hacerse?" }),
+    Object.freeze({ category: "Vulnerabilidades y resiliencia", text: "¿Qué cosa depende solo de ti y debería estar más compartida?" }),
+    Object.freeze({ category: "Vulnerabilidades y resiliencia", text: "¿Qué recurso, al perderse, sería un desastre para tu equipo?" }),
+    Object.freeze({ category: "Vulnerabilidades y resiliencia", text: "¿Qué conocimiento es frágil porque solo lo maneja una persona?" }),
+    Object.freeze({ category: "Vulnerabilidades y resiliencia", text: "¿Qué herramienta o persona es tu “plan B” cuando todo falla?" }),
+    Object.freeze({ category: "Vulnerabilidades y resiliencia", text: "¿Qué práctica protege al equipo en momentos de crisis?" }),
+    Object.freeze({ category: "Vulnerabilidades y resiliencia", text: "¿Qué hemos hecho para seguir adelante aun cuando faltaban recursos?" }),
+    Object.freeze({ category: "Vulnerabilidades y resiliencia", text: "¿Qué aprendizajes salieron de un error o falla que nos hizo más fuertes?" })
+  ]);
+
+  // --- featuresDeck aprobado (INMUTABLE) ---
+  const featuresDeck = Object.freeze([
+    Object.freeze({ category: "Singularidad frente a la competencia", text: "Es un recurso o capacidad que pocos competidores poseen o dominan." }),
+    Object.freeze({ category: "Singularidad frente a la competencia", text: "Su replicación es difícil o costosa para otros actores del mercado." }),
+    Object.freeze({ category: "Singularidad frente a la competencia", text: "Destaca por originalidad o rareza dentro del sector." }),
+    Object.freeze({ category: "Singularidad frente a la competencia", text: "Si desapareciera, no podría reemplazarse fácilmente en el mercado." }),
+    Object.freeze({ category: "Singularidad frente a la competencia", text: "No depende de proveedores genéricos, sino de fuentes únicas o relaciones exclusivas." }),
+    Object.freeze({ category: "Singularidad frente a la competencia", text: "Tomaría años o gran inversión que otro construya algo equivalente." }),
+    Object.freeze({ category: "Singularidad frente a la competencia", text: "Supera los estándares básicos que todos necesitan para operar." }),
+    Object.freeze({ category: "Singularidad frente a la competencia", text: "Cuando se muestra externamente, genera sorpresa o admiración, no indiferencia." }),
+    Object.freeze({ category: "Valor percibido por cliente y procesos", text: "Aporta beneficios tangibles al cliente, mejorando su experiencia." }),
+    Object.freeze({ category: "Valor percibido por cliente y procesos", text: "Contribuye a reducir costos, tiempos o errores de forma medible." }),
+    Object.freeze({ category: "Valor percibido por cliente y procesos", text: "Su ausencia tendría un impacto visible en la satisfacción o lealtad del cliente." }),
+    Object.freeze({ category: "Valor percibido por cliente y procesos", text: "Es un recurso reconocible y valorado por el usuario final." }),
+    Object.freeze({ category: "Valor percibido por cliente y procesos", text: "Incrementa la probabilidad de ganar negocios, contratos o licitaciones." }),
+    Object.freeze({ category: "Valor percibido por cliente y procesos", text: "Sostiene la calidad de los productos o servicios más allá del mínimo esperado." }),
+    Object.freeze({ category: "Valor percibido por cliente y procesos", text: "Genera un valor difícil de sustituir por alternativas externas." }),
+    Object.freeze({ category: "Valor percibido por cliente y procesos", text: "Es notorio incluso para quienes no son expertos, creando impacto emocional o funcional." }),
+    Object.freeze({ category: "Rareza y origen distintivo", text: "No hay muchas organizaciones con un recurso o capacidad semejante." }),
+    Object.freeze({ category: "Rareza y origen distintitivo", text: "Posee una esencia única derivada de la historia o trayectoria propia de la organización." }),
+    Object.freeze({ category: "Rareza y origen distintitivo", text: "Nació de aprendizajes, errores o experiencias irrepetibles." }),
+    Object.freeze({ category: "Rareza y origen distintitivo", text: "Depende de personas con talentos escasos o difíciles de encontrar." }),
+    Object.freeze({ category: "Rareza y origen distintitivo", text: "No puede ser replicado sin vivir la misma experiencia organizacional." }),
+    Object.freeze({ category: "Rareza y origen distintitivo", text: "Tiene un sello cultural o simbólico propio de la empresa." }),
+    Object.freeze({ category: "Rareza y origen distintitivo", text: "Su desarrollo refleja valores o identidad corporativa profundos." }),
+    Object.freeze({ category: "Rareza y origen distintitivo", text: "Si desapareciera, dejaría un vacío imposible de reemplazar." }),
+    Object.freeze({ category: "Difícil de imitar o copiar", text: "Su conocimiento está poco documentado y se transmite de forma tácita." }),
+    Object.freeze({ category: "Difícil de imitar o copiar", text: "Está protegido por barreras legales, secretos industriales o relaciones exclusivas." }),
+    Object.freeze({ category: "Difícil de imitar o copiar", text: "Es fácil de ver, pero difícil de entender y replicar correctamente." }),
+    Object.freeze({ category: "Difícil de imitar o copiar", text: "Su funcionamiento depende de confianza y vínculos internos difíciles de copiar." }),
+    Object.freeze({ category: "Difícil de imitar o copiar", text: "Requiere habilidades o experiencia acumulada que no se compran." }),
+    Object.freeze({ category: "Difícil de imitar o copiar", text: "Su efectividad depende de la cultura interna y los valores compartidos." }),
+    Object.freeze({ category: "Difícil de imitar o copiar", text: "Tiene un nivel de complejidad o interdependencia que desalienta la imitación." }),
+    Object.freeze({ category: "Difícil de imitar o copiar", text: "Aun si se mostrara públicamente, seguiría siendo difícil de reproducir." }),
+    Object.freeze({ category: "Capacidad organizativa para aprovecharlo", text: "La organización cuenta con procesos que maximizan su uso y valor." }),
+    Object.freeze({ category: "Capacidad organizativa para aprovecharlo", text: "Existen roles o responsables claros que lo gestionan y protegen." }),
+    Object.freeze({ category: "Capacidad organizativa para aprovecharlo", text: "Puede escalarse o aplicarse en distintas áreas o proyectos." }),
+    Object.freeze({ category: "Capacidad organizativa para aprovecharlo", text: "Está alineado a los objetivos estratégicos y a la visión corporativa." }),
+    Object.freeze({ category: "Capacidad organizativa para aprovecharlo", text: "Recibe inversión constante o mantenimiento para conservar su efectividad." }),
+    Object.freeze({ category: "Capacidad organizativa para aprovecharlo", text: "Se aprovecha mediante aprendizaje continuo y mejora adaptativa." }),
+    Object.freeze({ category: "Capacidad organizativa para aprovecharlo", text: "Aporta sin depender del contexto: sigue siendo útil ante cambios de mercado o regulación." }),
+    Object.freeze({ category: "Capacidad organizativa para aprovecharlo", text: "Evoluciona junto con la organización, adaptándose a nuevos desafíos." })
+  ]);
+
+  // --- utilidades ---
+  function cloneArray(arr){ return arr.map(i => ({...i})); }
+  function resetQuestionsDeck(){ appState.questionsDeckAvailable = cloneArray(questionsDeck); }
+  function resetFeaturesDeck(){ appState.featuresDeckAvailable = cloneArray(featuresDeck); }
+  function resetStarDeck(){ appState.starDeckAvailable = cloneArray(starDeckOriginal); }
+
+  function drawFrom(deckArr){
+    if(!Array.isArray(deckArr) || deckArr.length === 0) return null;
+    const idx = Math.floor(Math.random() * deckArr.length);
+    return deckArr.splice(idx, 1)[0];
+  }
+
+  function escapeHtml(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  function shuffleArray(arr){ for(let i=arr.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [arr[i],arr[j]]=[arr[j],arr[i]]; } }
+
+  // --- referencias DOM (se llenan en init) ---
+  let refs = {};
+
+  function log(){ try{ console.log.apply(console, ['[WQ]'].concat(Array.from(arguments))); }catch(e){} }
+
+  // --- inicialización ---
+  function init(){
+    refs = {
+      btnStartHome: document.getElementById('btn-start-home'),
+      btnBack: document.getElementById('btn-back'),
+      btnAddPlayer: document.getElementById('btn-add-player'),
+      btnStartGame: document.getElementById('btn-start-game'),
+      playerNameInput: document.getElementById('player-name'),
+      playersUl: document.getElementById('players-ul'),
+      playersListTitle: document.getElementById('players-list-title'),
+      playersNote: document.getElementById('players-note'),
+      playerFeedback: document.getElementById('player-feedback'),
+      currentPlayerNameEl: document.getElementById('current-player-name'),
+      btnSelectCards: document.getElementById('btn-select-cards'),
+      revealedQuestionEl: document.getElementById('revealed-question'),
+      revealedFeatureEl: document.getElementById('revealed-feature'),
+      timerDisplay: document.getElementById('timer-display'),
+      findingText: document.getElementById('finding-text'),
+      questionTextEl: document.getElementById('question-text'),
+      btnAnswerYes: document.getElementById('btn-answer-yes'),
+      btnAnswerNo: document.getElementById('btn-answer-no'),
+      btnNextTurn: document.getElementById('btn-next-turn'),
+      phase1TableBody: document.querySelector('#phase1-table tbody'),
+      phase1TableWrap: document.querySelector('.phase1-table-wrap'),
+      btnGoPhase2: document.getElementById('btn-go-phase2'),
+      phase2CurrentPlayer: document.getElementById('phase2-current-player'),
+      phase2HallazgosWrap: document.getElementById('phase2-hallazgos'),
+      btnDrawStar: document.getElementById('btn-draw-star'),
+      revealedStar: document.getElementById('revealed-star'),
+      votingArea: document.getElementById('voting-area'),
+      votersList: document.getElementById('voters-list'),
+      countYesEl: document.getElementById('count-yes'),
+      countNoEl: document.getElementById('count-no'),
+      btnFinalizeVote: document.getElementById('btn-finalize-vote'),
+      phase2Result: document.getElementById('phase2-result'),
+      resultsTableBody: document.querySelector('#results-table tbody'),
+      winnersTableBody: document.querySelector('#winners-table tbody'),
+      qualifiersTableBody: document.querySelector('#qualifiers-table tbody'),
+      btnBackToHome: document.getElementById('btn-back-to-home'),
+      btnBackToHome2: document.getElementById('btn-back-to-home-2'),
+      btnPrintResults: document.getElementById('btn-print-results'),
+      phase2HallazgosWrap: document.getElementById('phase2-hallazgos'),
+      tipoDetectedEl: document.getElementById('tipo-detected'),
+      // new fields
+      orgNameInput: document.getElementById('org-name'),
+      orgTypeSelect: document.getElementById('org-type'),
+      orgTypeOtherWrap: document.getElementById('org-type-other-wrap'),
+      orgTypeOtherInput: document.getElementById('org-type-other'),
+      // results org display
+      resultsOrg: document.getElementById('results-org')
+    };
+
+    // listeners
+    if(refs.btnStartHome){
+      refs.btnStartHome.addEventListener('click', function(e){
+        console.log('[WQ] btn-start-home clicked');
+        startNewSession();
+      });
+    }
+
+    refs.btnAddPlayer && refs.btnAddPlayer.addEventListener('click', addPlayer);
+    refs.playerNameInput && refs.playerNameInput.addEventListener('keydown', (e)=> { if(e.key === 'Enter'){ e.preventDefault(); addPlayer(); }});
+    refs.btnStartGame && refs.btnStartGame.addEventListener('click', startGamePhase1);
+
+    refs.btnSelectCards && refs.btnSelectCards.addEventListener('click', selectCards);
+    refs.btnAnswerYes && refs.btnAnswerYes.addEventListener('click', ()=> answerYesNo('Sí'));
+    refs.btnAnswerNo && refs.btnAnswerNo.addEventListener('click', ()=> answerYesNo('No'));
+    refs.btnNextTurn && refs.btnNextTurn.addEventListener('click', onNextTurnClicked);
+
+    refs.btnGoPhase2 && refs.btnGoPhase2.addEventListener('click', ()=> transitionToPhase2());
+    refs.btnDrawStar && refs.btnDrawStar.addEventListener('click', drawStarCard);
+    refs.btnFinalizeVote && refs.btnFinalizeVote.addEventListener('click', finalizeVote);
+    refs.btnBackToHome && refs.btnBackToHome.addEventListener('click', ()=> { resetGameState(); showScreen('home'); });
+    refs.btnBackToHome2 && refs.btnBackToHome2.addEventListener('click', ()=> { resetGameState(); showScreen('home'); });
+    refs.btnPrintResults && refs.btnPrintResults.addEventListener('click', ()=> { try { window.print(); } catch(e){ console.error('print error', e); } });
+
+    document.querySelectorAll('.close-btn').forEach(b=>{
+      b.addEventListener('click', ()=> { resetGameState(); showScreen('home'); });
+    });
+
+    // new field listeners
+    if(refs.orgNameInput) refs.orgNameInput.addEventListener('input', updateStartGameButton);
+    if(refs.orgTypeSelect) refs.orgTypeSelect.addEventListener('change', onOrgTypeChange);
+    if(refs.orgTypeOtherInput) refs.orgTypeOtherInput.addEventListener('input', updateStartGameButton);
+
+    // Expose startNewSession globally as a safe fallback
+    window.startNewSession = startNewSession;
+
+    // init decks & UI
+    resetQuestionsDeck();
+    resetFeaturesDeck();
+    resetStarDeck();
+
+    showScreen('home');
+    resetGameState();
+    renderPhase1Table();
+
+    // expose debug state
+    window._wq = window._wq || {};
+    window._wq.getState = ()=> ({
+      players: appState.players.slice(),
+      phase1Entries: appState.phase1Entries.slice(),
+      phase2Order: appState.phase2Order.slice(),
+      starDeckAvailableLen: appState.starDeckAvailable.length,
+      questionsLeft: appState.questionsDeckAvailable.length,
+      featuresLeft: appState.featuresDeckAvailable.length,
+      org: { name: appState.orgName, type: appState.orgType, other: appState.orgTypeOther }
+    });
+
+    log('init complete');
+  }
+
+  // --- Organization helpers ---
+  function onOrgTypeChange(){
+    const val = refs.orgTypeSelect ? refs.orgTypeSelect.value : '';
+    if(val === 'Otra'){
+      if(refs.orgTypeOtherWrap) refs.orgTypeOtherWrap.style.display = 'block';
+      if(refs.orgTypeOtherInput) refs.orgTypeOtherInput.focus();
+    } else {
+      if(refs.orgTypeOtherWrap) refs.orgTypeOtherWrap.style.display = 'none';
+      if(refs.orgTypeOtherInput) refs.orgTypeOtherInput.value = '';
+    }
+    updateStartGameButton();
+  }
+
+  function orgFieldsValid(){
+    const name = refs.orgNameInput ? (refs.orgNameInput.value || '').trim() : '';
+    const type = refs.orgTypeSelect ? (refs.orgTypeSelect.value || '') : '';
+    if(!name) return false;
+    if(!type) return false;
+    if(type === 'Otra'){
+      const other = refs.orgTypeOtherInput ? (refs.orgTypeOtherInput.value || '').trim() : '';
+      if(!other) return false;
+    }
+    return true;
+  }
+
+  // --- UI helpers ---
+  function showScreen(name){
+    const map = {
+      home: document.getElementById('screen-home'),
+      players: document.getElementById('screen-players'),
+      phase1: document.getElementById('screen-phase1'),
+      phase2: document.getElementById('screen-phase2'),
+      results: document.getElementById('screen-results')
+    };
+    Object.values(map).forEach(s=> s && s.classList.remove('visible'));
+    if(map[name]) map[name].classList.add('visible');
+  }
+
+  function showFeedback(msg, type='info', persist=false){
+    const el = refs.playerFeedback;
+    if(!el) return;
+    el.textContent = msg;
+    el.className = 'feedback ' + (type || 'info');
+    if(!persist) setTimeout(()=> { if(el.textContent === msg) el.textContent = ''; }, 3500);
+  }
+
+  function renderPlayers(){
+    const ul = refs.playersUl;
+    if(!ul) return;
+    ul.innerHTML = '';
+    refs.playersListTitle && (refs.playersListTitle.textContent = `Jugadores añadidos (${appState.players.length}/${MAX_PLAYERS})`);
+    if(appState.players.length === 0){
+      const li = document.createElement('li'); li.className = 'small'; li.textContent = 'No hay jugadores añadidos todavía.'; appendSafe(ul, li); return;
+    }
+    appState.players.forEach((p, idx) => {
+      const li = document.createElement('li');
+      li.style.display='flex'; li.style.justifyContent='space-between'; li.style.alignItems='center';
+      const span = document.createElement('span'); span.className = 'player-name'; span.textContent = p;
+      const removeBtn = document.createElement('button'); removeBtn.type = 'button'; removeBtn.textContent = 'Eliminar';
+      removeBtn.addEventListener('click', ()=> { appState.players.splice(idx,1); renderPlayers(); updateStartGameButton(); });
+      appendSafe(li, span); appendSafe(li, removeBtn); appendSafe(ul, li);
+    });
+  }
+
+  function updateStartGameButton(){
+    const btn = refs.btnStartGame;
+    if(!btn) return;
+    const playersOk = (appState.players.length >= MIN_PLAYERS && appState.players.length <= MAX_PLAYERS);
+    const orgOk = orgFieldsValid();
+    if(playersOk && orgOk){
+      btn.disabled = false;
+      refs.playersNote && (refs.playersNote.textContent = `Hay ${appState.players.length} jugadores. Puedes comenzar. (Se permiten ${MIN_PLAYERS}–${MAX_PLAYERS}). Datos de partida completos.`);
+    } else {
+      btn.disabled = true;
+      // show more specific hint
+      if(!orgOk){
+        refs.playersNote && (refs.playersNote.textContent = `Complete los datos de partida obligatorios arriba antes de comenzar.`);
+      } else if(appState.players.length < MIN_PLAYERS){
+        refs.playersNote && (refs.playersNote.textContent = `Faltan ${MIN_PLAYERS - appState.players.length} jugador(es) para poder comenzar. Min ${MIN_PLAYERS}, máx ${MAX_PLAYERS}.`);
+      } else {
+        refs.playersNote && (refs.playersNote.textContent = `Se ha alcanzado el máximo de jugadores (${MAX_PLAYERS}).`);
+      }
+    }
+  }
+
+  function addPlayer(){
+    const input = refs.playerNameInput;
+    if(!input) return;
+    const name = (input.value || '').trim();
+    if(!name){ showFeedback('Ingresa un nombre válido.','error'); return; }
+    if(appState.players.some(p => p.toLowerCase() === name.toLowerCase())){ showFeedback('Ese nombre ya fue añadido.','error'); input.value = ''; return; }
+    if(appState.players.length >= MAX_PLAYERS){ showFeedback(`No se pueden agregar más de ${MAX_PLAYERS} jugadores.`,'error'); input.value=''; input.disabled=true; refs.btnAddPlayer.disabled=true; return; }
+    appState.players.push(name);
+    input.value = '';
+    renderPlayers();
+    updateStartGameButton();
+    input.focus();
+    if(appState.players.length === MAX_PLAYERS){ showFeedback(`Máximo alcanzado (${MAX_PLAYERS}).`,'info', true); input.disabled = true; refs.btnAddPlayer.disabled = true; }
+  }
+
+  // --- temporizador ---
+  function startTimer(seconds){
+    clearTimer();
+    appState.remainingSeconds = seconds;
+    updateTimerDisplay();
+    appState.timerRef = setInterval(()=> {
+      appState.remainingSeconds--;
+      updateTimerDisplay();
+      if(appState.remainingSeconds <= 0){ clearTimer(); onTimerExpired(); }
+    }, 1000);
+  }
+  function clearTimer(){ if(appState.timerRef){ clearInterval(appState.timerRef); appState.timerRef = null; } appState.remainingSeconds = 0; updateTimerDisplay(); }
+  function updateTimerDisplay(){ if(refs.timerDisplay){ const mm = String(Math.floor((appState.remainingSeconds||0)/60)).padStart(2,'0'); const ss = String((appState.remainingSeconds||0)%60).padStart(2,'0'); refs.timerDisplay.textContent = `${mm}:${ss}`; } }
+
+  // --- fase 1: selección y registro ---
+  function selectCards(){
+    if(appState.phase1Entries.length >= PHASE1_TARGET_ENTRIES){
+      showFeedback(`Fase 1 ya completada (${PHASE1_TARGET_ENTRIES} hallazgos). Avanzando a Fase 2...`, 'info', true);
+      setTimeout(()=> transitionToPhase2(), 200);
+      return;
+    }
+    if(appState.selectionActive) return;
+    if(appState.questionsDeckAvailable.length === 0) resetQuestionsDeck();
+    if(appState.featuresDeckAvailable.length === 0) resetFeaturesDeck();
+    appState.currentQuestion = drawFrom(appState.questionsDeckAvailable) || null;
+    appState.currentFeature = drawFrom(appState.featuresDeckAvailable) || null;
+
+    refs.revealedQuestionEl && (refs.revealedQuestionEl.textContent = appState.currentQuestion ? `Categoría: ${appState.currentQuestion.category}\n\n${appState.currentQuestion.text}` : '—');
+    refs.revealedFeatureEl && (refs.revealedFeatureEl.textContent = appState.currentFeature ? `Categoría: ${appState.currentFeature.category}\n\n${appState.currentFeature.text}` : '—');
+    refs.questionTextEl && (refs.questionTextEl.textContent = appState.currentFeature ? `Se cumple la característica "${appState.currentFeature.text}"?` : 'Pregunta: —');
+    if(refs.findingText){ refs.findingText.disabled = false; refs.findingText.value = ''; refs.findingText.focus(); }
+    appState.currentAnswer = null;
+    refs.btnAnswerYes && (refs.btnAnswerYes.disabled = false);
+    refs.btnAnswerNo && (refs.btnAnswerNo.disabled = false);
+    refs.btnAnswerYes && refs.btnAnswerYes.classList.remove('active');
+    refs.btnAnswerNo && refs.btnAnswerNo.classList.remove('active');
+    refs.btnNextTurn && (refs.btnNextTurn.disabled = true);
+    appState.selectionActive = true;
+    startTimer(300);
+    showFeedback('Cartas seleccionadas. Tienes 5 minutos para redactar y responder.','info');
+    if(refs.btnSelectCards) refs.btnSelectCards.disabled = true;
+  }
+
+  function onTimerExpired(){
+    updateTimerDisplay();
+    if(refs.findingText) refs.findingText.disabled = true;
+    showFeedback('Se terminó el tiempo.','error');
+    const text = (refs.findingText && refs.findingText.value || '').trim();
+    if(!text){
+      finalizeTurn(false);
+    } else {
+      showFeedback('Tiempo acabado: responde Sí/No si aún no lo hiciste y pulsa "Siguiente turno" para finalizar.','info', true);
+      refs.btnAnswerYes && (refs.btnAnswerYes.disabled = false);
+      refs.btnAnswerNo && (refs.btnAnswerNo.disabled = false);
+      refs.btnNextTurn && (refs.btnNextTurn.disabled = true);
+    }
+  }
+
+  function answerYesNo(choice){
+    if(!appState.selectionActive) return;
+    appState.currentAnswer = choice;
+    if(choice === 'Sí'){ refs.btnAnswerYes.classList.add('active'); refs.btnAnswerNo.classList.remove('active'); }
+    else { refs.btnAnswerNo.classList.add('active'); refs.btnAnswerYes.classList.remove('active'); }
+    showFeedback(`Respuesta registrada: ${choice}.`, 'info', false);
+    refs.btnNextTurn && (refs.btnNextTurn.disabled = false);
+  }
+
+  function onNextTurnClicked(){
+    if(!appState.selectionActive){ showFeedback('Debes seleccionar cartas primero.','error'); return; }
+    const text = (refs.findingText && refs.findingText.value || '').trim();
+    if(!appState.currentAnswer){
+      if(refs.btnAnswerYes && refs.btnAnswerYes.classList.contains('active')) appState.currentAnswer = 'Sí';
+      else if(refs.btnAnswerNo && refs.btnAnswerNo.classList.contains('active')) appState.currentAnswer = 'No';
+    }
+    if(!text){ finalizeTurn(false); return; }
+    if(!appState.currentAnswer){ showFeedback('Debes responder la pregunta Sí/No antes de pasar al siguiente turno.','info'); return; }
+    finalizeTurn(true);
+  }
+
+  // muestra temporal del tipo detectado en la cabecera de Fase 1
+  let _tipoTimeout = null;
+  function showTemporaryType(tipo){
+    if(!refs.tipoDetectedEl) return;
+    refs.tipoDetectedEl.textContent = `Tipo detectado: ${tipo}`;
+    refs.tipoDetectedEl.classList.add('visible');
+    if(_tipoTimeout) clearTimeout(_tipoTimeout);
+    _tipoTimeout = setTimeout(()=> {
+      refs.tipoDetectedEl.classList.remove('visible');
+      refs.tipoDetectedEl.textContent = '';
+      _tipoTimeout = null;
+    }, 4000);
+  }
+
+  function finalizeTurn(addEntryAllowed){
+    const playerName = appState.players[appState.currentPlayerIndex];
+    const text = (refs.findingText && refs.findingText.value || '').trim();
+    const featureForEntry = appState.currentFeature;
+    clearTimer();
+
+    if(appState.phase1Entries.length >= PHASE1_TARGET_ENTRIES){
+      showFeedback(`Fase 1 ya alcanzó ${PHASE1_TARGET_ENTRIES} hallazgos. Avanzando a Fase 2...`, 'info', true);
+      setTimeout(()=> transitionToPhase2(), 200);
+      return;
+    }
+
+    if(addEntryAllowed && text && appState.currentAnswer){
+      // determinación automática basada en la primera palabra (terminación en -ar/-er/-ir)
+      const firstWord = (text.split(/\s+/)[0] || '').replace(/^[^\wáéíóúüñ]+|[^\wáéíóúüñ]+$/g,'');
+      const isCapacity = /(ar|er|ir)$/i.test(firstWord.toLowerCase());
+      const tipo = isCapacity ? 'Capacidad' : 'Recurso';
+
+      let score = 0;
+      score += isCapacity ? 5 : 3;
+      score += (appState.currentAnswer === 'Sí') ? 1 : 0;
+
+      const entry = {
+        jugador: playerName,
+        hallazgo: text,
+        tipo,
+        respondio: appState.currentAnswer,
+        pregunta: featureForEntry ? `Se cumple la característica "${featureForEntry.text}"?` : '',
+        caracteristica: featureForEntry ? `${featureForEntry.category} — ${featureForEntry.text}` : '',
+        puntaje: score,
+        processed:false,
+        revealed:false,
+        classification:null,
+        phase2Score:0,
+        finalScore:0
+      };
+      appState.phase1Entries.push(entry);
+      if(appState.phase1Entries.length > PHASE1_TARGET_ENTRIES) appState.phase1Entries = appState.phase1Entries.slice(0, PHASE1_TARGET_ENTRIES);
+      showFeedback(`Turno guardado. ${playerName} obtiene ${score} pts (Fase 1).`, 'success');
+
+      // mostrar temporalmente el tipo detectado para transparencia
+      showTemporaryType(tipo);
+    } else {
+      showFeedback(`${playerName} perdió el turno o no registró hallazgo válido. No se añade a la tabla.`, 'error');
+    }
+
+    renderPhase1Table();
+    clearPhase1Board();
+
+    if(appState.phase1Entries.length >= PHASE1_TARGET_ENTRIES){
+      refs.btnSelectCards && (refs.btnSelectCards.disabled = true);
+      showFeedback(`Se completaron ${appState.phase1Entries.length} hallazgos. Avanzando automáticamente a la Fase 2...`, 'info', true);
+      setTimeout(()=> { transitionToPhase2(); }, 200);
+      return;
+    }
+
+    appState.currentPlayerIndex = (appState.currentPlayerIndex + 1) % appState.players.length;
+    updateCurrentPlayerUI();
+    refs.btnSelectCards && (refs.btnSelectCards.disabled = false);
+    appState.selectionActive = false;
+    appState.currentAnswer = null;
+  }
+
+  function clearPhase1Board(){
+    refs.revealedQuestionEl && (refs.revealedQuestionEl.textContent = '—');
+    refs.revealedFeatureEl && (refs.revealedFeatureEl.textContent = '—');
+    refs.questionTextEl && (refs.questionTextEl.textContent = 'Pregunta: —');
+    if(refs.findingText){ refs.findingText.value = ''; refs.findingText.disabled = true; }
+    refs.btnAnswerYes && (refs.btnAnswerYes.disabled = true);
+    refs.btnAnswerNo && (refs.btnAnswerNo.disabled = true);
+    refs.btnAnswerYes && refs.btnAnswerYes.classList.remove('active');
+    refs.btnAnswerNo && refs.btnAnswerNo.classList.remove('active');
+    refs.btnNextTurn && (refs.btnNextTurn.disabled = true);
+    refs.timerDisplay && (refs.timerDisplay.textContent = '00:00');
+    appState.currentQuestion = null; appState.currentFeature = null; appState.currentAnswer = null;
+    appState.selectionActive = false;
+    clearTimer();
+    refs.btnSelectCards && (refs.btnSelectCards.disabled = false);
+  }
+
+  function renderPhase1Table(){
+    const tbody = refs.phase1TableBody;
+    if(!tbody) return;
+    tbody.innerHTML = '';
+    if(appState.phase1Entries.length === 0){
+      const tr = document.createElement('tr'); const td = document.createElement('td'); td.colSpan = 10; td.className = 'small'; td.textContent = 'No hay registros aún.'; appendSafe(tr, td); appendSafe(tbody, tr); return;
+    }
+    appState.phase1Entries.forEach(e=>{
+      const tr = document.createElement('tr');
+      const classif = e.classification ? (e.classification.decision === 'Sí' ? 'Winner' : 'Qualifier') : '';
+      const phase2Score = typeof e.phase2Score === 'number' ? e.phase2Score : '';
+      const finalScore = typeof e.finalScore === 'number' ? e.finalScore : '';
+      const tdJugador = document.createElement('td'); tdJugador.textContent = e.jugador;
+      const tdHallazgo = document.createElement('td'); tdHallazgo.textContent = e.hallazgo;
+      const tdTipo = document.createElement('td'); tdTipo.textContent = e.tipo;
+      const tdRespondio = document.createElement('td'); tdRespondio.textContent = e.respondio;
+      const tdPregunta = document.createElement('td'); tdPregunta.textContent = e.pregunta;
+      const tdCaracteristica = document.createElement('td'); tdCaracteristica.textContent = e.caracteristica;
+      const tdPuntaje = document.createElement('td'); tdPuntaje.textContent = String(e.puntaje);
+      const tdClassif = document.createElement('td'); tdClassif.textContent = classif;
+      const tdPhase2 = document.createElement('td'); tdPhase2.textContent = String(phase2Score);
+      const tdFinal = document.createElement('td'); tdFinal.textContent = String(finalScore);
+      appendSafe(tr, tdJugador); appendSafe(tr, tdHallazgo); appendSafe(tr, tdTipo); appendSafe(tr, tdRespondio); appendSafe(tr, tdPregunta); appendSafe(tr, tdCaracteristica); appendSafe(tr, tdPuntaje); appendSafe(tr, tdClassif); appendSafe(tr, tdPhase2); appendSafe(tr, tdFinal);
+      appendSafe(tbody, tr);
+    });
+  }
+
+  function updateCurrentPlayerUI(){ if(refs.currentPlayerNameEl) refs.currentPlayerNameEl.textContent = appState.players[appState.currentPlayerIndex] || '—'; }
+
+  // --- phase2 decks (starDeckOriginal defined next) ---
+  const starDeckOriginal = Object.freeze([
+    Object.freeze({ question: "¿Este recurso es difícil de copiar o de igualar por otros?", clarification: "Poseemos una capacidad o activo que otros no pueden replicar fácilmente." }),
+    Object.freeze({ question: "¿Depende de un conocimiento, práctica o relación que solo nosotros tenemos?", clarification: "Es un saber o vínculo único, nacido de nuestra experiencia o contexto." }),
+    Object.freeze({ question: "¿Genera valor visible o apreciable para el cliente?", clarification: "Impacta directamente en la satisfacción, fidelidad o preferencia del cliente." }),
+    Object.freeze({ question: "¿Requiere experiencia o cultura interna para funcionar bien?", clarification: "Se apoya en nuestra forma de trabajar, en hábitos o valores propios." }),
+    Object.freeze({ question: "¿Podría sostenerse sin una persona o equipo específico?", clarification: "Está institucionalizado; no depende de individuos puntuales." }),
+    Object.freeze({ question: "¿Contribuye directamente a que logremos nuestros objetivos estratégicos?", clarification: "Está alineado con la dirección y las prioridades de la organización." }),
+    Object.freeze({ question: "¿Se mantiene vigente si el entorno o la tecnología cambian?", clarification: "Es adaptable y conserva su valor incluso ante cambios externos." }),
+    Object.freeze({ question: "¿Podemos ampliarlo o aplicarlo a otras áreas sin perder su fuerza?", clarification: "Es escalable y puede generar más valor en distintas unidades o proyectos." }),
+    Object.freeze({ question: "¿Es reconocido fuera del equipo como algo que hacemos mejor que otros?", clarification: "Tiene reputación diferenciadora dentro o fuera de la organización." }),
+    Object.freeze({ question: "¿Hemos invertido tiempo o recursos en protegerlo o fortalecerlo?", clarification: "Está cuidado, formalizado o protegido como un activo estratégico." })
+  ]);
+
+  function buildPhase2Order(){ appState.phase2Order = []; for(let i=0;i<appState.phase1Entries.length;i++) appState.phase2Order.push(i); shuffleArray(appState.phase2Order); }
+
+  function transitionToPhase2(){
+    resetStarDeck();
+    buildPhase2Order();
+    renderPhase2Hallazgos();
+    refs.phase2CurrentPlayer && (refs.phase2CurrentPlayer.textContent = appState.players[appState.currentPlayerIndex] || '—');
+    showScreen('phase2');
+    appState.phase2SelectedIndex = null;
+    refs.revealedStar && (refs.revealedStar.textContent = '—');
+    refs.btnDrawStar && (refs.btnDrawStar.disabled = true);
+    if(refs.votingArea) refs.votingArea.style.display = 'none';
+    refs.phase2Result && (refs.phase2Result.innerHTML = '');
+    showFeedback('Has pasado a la Fase 2. Selecciona un hallazgo numerado para empezar la clasificación.', 'info');
+  }
+
+  function renderPhase2Hallazgos(){
+    const wrap = refs.phase2HallazgosWrap;
+    if(!wrap) return;
+    wrap.innerHTML = '';
+    for(let pos=0; pos<appState.phase2Order.length; pos++){
+      const entryIndex = appState.phase2Order[pos];
+      const e = appState.phase1Entries[entryIndex];
+      const card=document.createElement('div');
+      card.dataset.pos = String(pos);
+      if(e.processed){
+        card.className='hallazgo-card locked';
+        card.textContent = '';
+      } else if(!e.revealed){
+        card.className='hallazgo-card number-only';
+        card.textContent = String(pos+1);
+      } else {
+        card.className='hallazgo-card revealed';
+        const h4=document.createElement('h4'); h4.textContent = e.tipo;
+        const p=document.createElement('p'); p.textContent = e.hallazgo;
+        appendSafe(card, h4); appendSafe(card, p);
+      }
+      if(!e.processed){
+        card.addEventListener('click', ()=> onSelectPhase2Hallazgo(pos));
+      }
+      appendSafe(wrap, card);
+    }
+    appState.phase2SelectedIndex = null;
+    if(refs.btnDrawStar) refs.btnDrawStar.disabled = true;
+    if(refs.revealedStar) refs.revealedStar.textContent = '—';
+    if(refs.votingArea) refs.votingArea.style.display = 'none';
+    if(refs.phase2Result) refs.phase2Result.innerHTML = '';
+  }
+
+  function onSelectPhase2Hallazgo(pos){
+    if(appState.phase2SelectedIndex !== null) return;
+    const entryIndex = appState.phase2Order[pos];
+    if(appState.phase1Entries[entryIndex].processed) return;
+    appState.phase2SelectedIndex = pos;
+    const children = Array.from(refs.phase2HallazgosWrap.children);
+    children.forEach((c,i)=>{ 
+      if(i===pos){
+        c.className='hallazgo-card revealed locked';
+        const e = appState.phase1Entries[appState.phase2Order[i]];
+        c.innerHTML='';
+        const h4=document.createElement('h4'); h4.textContent = e.tipo;
+        const p=document.createElement('p'); p.textContent = e.hallazgo;
+        appendSafe(c, h4); appendSafe(c, p);
+        e.revealed = true;
+      } else {
+        const other = refs.phase2HallazgosWrap.children[i];
+        other && other.classList && other.classList.add('locked');
+      }
+    });
+    refs.btnDrawStar && (refs.btnDrawStar.disabled = false);
+    showFeedback('Hallazgo seleccionado y revelado. Ahora extrae una carta del mazo de clasificación (★).', 'info');
+  }
+
+  function drawStarCard(){
+    try{
+      log('drawStarCard called', { phase2SelectedIndex: appState.phase2SelectedIndex, starDeckAvailableLen: appState.starDeckAvailable.length });
+      if(appState.phase2SelectedIndex === null){ showFeedback('Selecciona primero un hallazgo para clasificar.', 'error'); return; }
+      if(!Array.isArray(appState.starDeckAvailable) || appState.starDeckAvailable.length === 0){ if(refs.revealedStar) refs.revealedStar.textContent = '—'; showFeedback('No quedan cartas en el mazo de clasificación.', 'error'); if(refs.btnDrawStar) refs.btnDrawStar.disabled = true; log('drawStarCard aborted: starDeckAvailable empty or invalid', appState.starDeckAvailable); return; }
+      if(refs.btnDrawStar) refs.btnDrawStar.disabled = true;
+      const card = drawFrom(appState.starDeckAvailable);
+      if(!card || !card.question){ log('drawStarCard: malformed card', card); if(refs.revealedStar) refs.revealedStar.textContent = '—'; showFeedback('Error al extraer la carta de clasificación (datos corruptos).','error'); if(refs.btnDrawStar) refs.btnDrawStar.disabled = !(appState.starDeckAvailable.length > 0); return; }
+      appState.phase2StarCard = card;
+
+      if(refs.revealedStar){
+        refs.revealedStar.innerHTML = '';
+        const strong = document.createElement('strong'); strong.textContent = card.question;
+        const br = document.createElement('div'); br.style.height = '6px';
+        const em = document.createElement('em'); em.textContent = (card.clarification || '');
+        appendSafe(refs.revealedStar, strong); appendSafe(refs.revealedStar, br); appendSafe(refs.revealedStar, em);
+      }
+
+      setupVotingUI();
+      showFeedback('Carta de clasificación revelada. Inicien la votación.', 'info');
+    } catch(err){
+      console.error('drawStarCard unexpected error:', err);
+      showFeedback('Error inesperado al extraer la carta de clasificación. Mira la consola para detalles.', 'error', true);
+      if(refs.btnDrawStar) refs.btnDrawStar.disabled = !(appState.starDeckAvailable && appState.starDeckAvailable.length > 0);
+    }
+  }
+
+  function setupVotingUI(){
+    if(!refs.votersList) return;
+    refs.votersList.innerHTML='';
+    appState.players.forEach((pl,i)=>{
+      const row=document.createElement('div'); row.className='voter-row';
+      const chk=document.createElement('input'); chk.type='checkbox'; chk.dataset.playerIndex=String(i);
+      chk.addEventListener('change', onVoterChange);
+      const lbl=document.createElement('span'); lbl.textContent=pl;
+      appendSafe(row, chk); appendSafe(row, lbl); appendSafe(refs.votersList, row);
+    });
+    refs.countYesEl && (refs.countYesEl.textContent='0');
+    refs.countNoEl && (refs.countNoEl.textContent=String(appState.players.length));
+    if(refs.votingArea) refs.votingArea.style.display = 'flex';
+    if(refs.btnFinalizeVote) refs.btnFinalizeVote.disabled=false;
+    if(refs.phase2Result) refs.phase2Result.innerHTML='';
+  }
+
+  function onVoterChange(){
+    if(!refs.votersList) return;
+    const checks = refs.votersList.querySelectorAll('input[type="checkbox"]');
+    let yes = 0;
+    checks.forEach(c=>{ if(c.checked) yes++; });
+    const total = appState.players.length;
+    const no = total - yes;
+    refs.countYesEl && (refs.countYesEl.textContent = String(yes));
+    refs.countNoEl && (refs.countNoEl.textContent = String(no));
+    refs.btnFinalizeVote && (refs.btnFinalizeVote.disabled = false);
+  }
+
+  function finalizeVote(){
+    if(!refs.votersList) return;
+    const checks = refs.votersList.querySelectorAll('input[type="checkbox"]');
+    let yes = 0;
+    checks.forEach(c=>{ if(c.checked) yes++; });
+    const total = appState.players.length;
+    const no = total - yes;
+    const decision = (yes >= no) ? 'Sí' : 'No';
+    applyPhase2Decision(decision, yes, no);
+  }
+
+  function applyPhase2Decision(decision, yesCount, noCount){
+    const inputs = refs.votersList ? refs.votersList.querySelectorAll('input') : [];
+    inputs.forEach(i=>i.disabled=true);
+    if(refs.btnFinalizeVote) refs.btnFinalizeVote.disabled = true;
+    if(refs.phase2Result) refs.phase2Result.innerHTML = `<div class="result-badge">Decisión: ${decision} &nbsp; (Sí: ${yesCount} — No: ${noCount})</div>`;
+    showFeedback(`Decisión final: ${decision}.`, 'success');
+
+    if(appState.phase2SelectedIndex !== null){
+      const entryIndex = appState.phase2Order[appState.phase2SelectedIndex];
+      const entry = appState.phase1Entries[entryIndex];
+      entry.processed = true;
+      entry.classification = { decision, yesCount, noCount };
+      entry.phase2Score = (decision === 'Sí') ? 1 : 0;
+      entry.finalScore = entry.puntaje * entry.phase2Score;
+    }
+
+    renderPhase1Table();
+
+    setTimeout(()=>{
+      renderPhase2Hallazgos();
+      if(refs.votingArea) refs.votingArea.style.display = 'none';
+      if(refs.phase2Result) refs.phase2Result.innerHTML = '';
+      if(refs.revealedStar) refs.revealedStar.textContent = '—';
+      appState.phase2SelectedIndex = null;
+      appState.phase2StarCard = null;
+      const remaining = appState.phase1Entries.filter(e=>!e.processed).length;
+      if(remaining === 0){
+        showFeedback('Se han procesado todos los hallazgos en Fase 2. Calculando resultados...', 'info', true);
+        setTimeout(()=> showResults(), 500);
+      } else {
+        showFeedback(`${remaining} hallazgos restantes por clasificar.`, 'info', true);
+      }
+    }, 900);
+  }
+
+  // --- resultados ---
+  function showResults(){
+    const totals = {};
+    appState.players.forEach(p=>totals[p]=0);
+    appState.phase1Entries.forEach(e=>{ if(e && typeof e.finalScore === 'number') totals[e.jugador] = (totals[e.jugador]||0) + e.finalScore; });
+    const ranking = Object.entries(totals).map(([player, score])=>({player, score}));
+    ranking.sort((a,b)=> b.score - a.score);
+
+    // Display organization info above the score table
+    if(refs.resultsOrg){
+      const name = appState.orgName || '';
+      const type = appState.orgType || '';
+      let display = '';
+      if(name) display += `Organización: ${name}`;
+      if(type){
+        if(display) display += ' — ';
+        display += `Tipo: ${type}`;
+        if(type === 'Otra' && appState.orgTypeOther){
+          display += ` (${appState.orgTypeOther})`;
+        }
+      }
+      refs.resultsOrg.textContent = display;
+    }
+
+    if(refs.resultsTableBody) refs.resultsTableBody.innerHTML='';
+    ranking.forEach((r, idx)=>{
+      if(!refs.resultsTableBody) return;
+      const tr=document.createElement('tr');
+      const tdPos=document.createElement('td'); tdPos.textContent=String(idx+1);
+      const tdPlayer=document.createElement('td'); tdPlayer.textContent=r.player;
+      const tdScore=document.createElement('td'); tdScore.textContent=String(r.score);
+      appendSafe(tr, tdPos); appendSafe(tr, tdPlayer); appendSafe(tr, tdScore); appendSafe(refs.resultsTableBody, tr);
+    });
+
+    const winners = appState.phase1Entries.filter(e=> e.classification && e.classification.decision === 'Sí').slice().sort((a,b)=> (b.finalScore||0) - (a.finalScore||0));
+    if(refs.winnersTableBody) refs.winnersTableBody.innerHTML = '';
+    winners.forEach(e=>{
+      if(!refs.winnersTableBody) return;
+      const tr=document.createElement('tr');
+      const tdH=document.createElement('td'); tdH.textContent=e.hallazgo;
+      const tdT=document.createElement('td'); tdT.textContent=e.tipo;
+      const tdN=document.createElement('td'); tdN.textContent=(e.respondio==='Sí' && e.caracteristica)?`cumple con ${e.caracteristica}`:'';
+      appendSafe(tr, tdH); appendSafe(tr, tdT); appendSafe(tr, tdN); appendSafe(refs.winnersTableBody, tr);
+    });
+
+    const qualifiers = appState.phase1Entries.filter(e=> e.classification && e.classification.decision === 'No').slice().sort((a,b)=> (b.puntaje||0)-(a.puntaje||0));
+    if(refs.qualifiersTableBody) refs.qualifiersTableBody.innerHTML = '';
+    qualifiers.forEach(e=>{
+      if(!refs.qualifiersTableBody) return;
+      const tr=document.createElement('tr');
+      const tdH=document.createElement('td'); tdH.textContent=e.hallazgo;
+      const tdT=document.createElement('td'); tdT.textContent=e.tipo;
+      const tdN=document.createElement('td'); tdN.textContent=(e.respondio==='Sí' && e.caracteristica)?`cumple con ${e.caracteristica}`:'';
+      appendSafe(tr, tdH); appendSafe(tr, tdT); appendSafe(tr, tdN); appendSafe(refs.qualifiersTableBody, tr);
+    });
+
+    showScreen('results');
+  }
+
+  // --- reinicio / estado ---
+  function resetGameState(){
+    appState.players.length = 0;
+    appState.phase1Entries.length = 0;
+    appState.currentPlayerIndex = 0;
+    clearPhase1Board();
+    // reset partida fields
+    appState.orgName = '';
+    appState.orgType = '';
+    appState.orgTypeOther = '';
+    if(refs.orgNameInput) refs.orgNameInput.value = '';
+    if(refs.orgTypeSelect) refs.orgTypeSelect.value = '';
+    if(refs.orgTypeOtherInput) refs.orgTypeOtherInput.value = '';
+    if(refs.orgTypeOtherWrap) refs.orgTypeOtherWrap.style.display = 'none';
+
+    // clear results org display
+    if(refs.resultsOrg) refs.resultsOrg.textContent = '';
+
+    if(refs.playerNameInput) refs.playerNameInput.value = '';
+    if(refs.playerNameInput) refs.playerNameInput.disabled = false;
+    if(refs.btnAddPlayer) refs.btnAddPlayer.disabled = false;
+    renderPlayers();
+    updateStartGameButton();
+    renderPhase1Table();
+    if(refs.phase1TableWrap) refs.phase1TableWrap.style.display = 'none';
+    if(refs.btnGoPhase2) refs.btnGoPhase2.style.display = 'none';
+    resetStarDeck(); resetQuestionsDeck(); resetFeaturesDeck();
+    appState.phase2Order = []; appState.phase2SelectedIndex = null;
+    if(refs.winnersTableBody) refs.winnersTableBody.innerHTML = '';
+    if(refs.qualifiersTableBody) refs.qualifiersTableBody.innerHTML = '';
+    if(refs.resultsTableBody) refs.resultsTableBody.innerHTML = '';
+  }
+
+  function startNewSession(){ resetGameState(); showScreen('players'); setTimeout(()=> {
+    if(refs.orgNameInput) refs.orgNameInput.focus();
+  }, 50); }
+
+  function startGamePhase1(){
+    log('startGamePhase1 called, players.length=', appState.players.length);
+    // validate org fields too
+    if(!orgFieldsValid()){
+      showFeedback('Complete los datos de partida obligatorios antes de comenzar (Organización y Tipo).','error');
+      return;
+    }
+    if(appState.players.length < MIN_PLAYERS){ showFeedback(`No se puede comenzar: se requieren al menos ${MIN_PLAYERS} jugadores.`, 'error'); return; }
+
+    // store partida data
+    appState.orgName = refs.orgNameInput ? (refs.orgNameInput.value || '').trim() : '';
+    appState.orgType = refs.orgTypeSelect ? (refs.orgTypeSelect.value || '') : '';
+    appState.orgTypeOther = (appState.orgType === 'Otra' && refs.orgTypeOtherInput) ? (refs.orgTypeOtherInput.value || '').trim() : '';
+
+    shuffleArray(appState.players);
+    appState.phase1Entries = [];
+    appState.currentPlayerIndex = 0;
+    clearPhase1Board();
+    renderPhase1Table();
+    updateCurrentPlayerUI();
+    showScreen('phase1');
+    if(refs.phase1TableWrap) refs.phase1TableWrap.style.display = 'none';
+    if(refs.btnGoPhase2) refs.btnGoPhase2.style.display = 'none';
+    showFeedback('Orden de jugadores establecido al azar. Comienza la Fase 1.', 'info');
+  }
+
+  // inicializar cuando DOM listo
+  document.addEventListener('DOMContentLoaded', ()=> { try{ init(); } catch(e){ console.error('Init error', e); } });
+
+})();
+  </script>
+</body>
+</html>
