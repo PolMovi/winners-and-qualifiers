@@ -8,78 +8,118 @@ Product decisions across versions — what changed, and why.
 
 **Theme: Make it feel worth taking seriously.**
 
-The underlying game logic was validated in V2 sessions. The problem was perception: players treated it like a rough prototype, which lowered their investment in the exercise. A workshop tool that doesn't feel deliberate doesn't get deliberate answers.
+The game logic was validated in V2 sessions. The problem was perception: players treated it like a rough prototype, which lowered their investment in the exercise. A workshop tool that doesn't feel deliberate doesn't get deliberate answers.
 
-### Design system overhaul
+### Typography — complete replacement
 
-Replaced system-font/blue-card aesthetic with a constructivist visual language: Big Shoulders Display for headings, Archivo for body, JetBrains Mono for labels and metadata. Neon (#DFFF00) as the single accent color. Grid texture + dot texture on the background. Zero border-radius on interactive elements.
+V1 used `system-ui, -apple-system, Segoe UI, Roboto` — whatever the OS provides. No typographic identity.
 
-**Why:** The visual identity needed to signal "this was designed for a purpose" without looking corporate. The constructivist aesthetic — dense, typographic, geometric — communicates rigor while staying distinct from enterprise software.
+Current version uses a deliberate three-font constructivist pairing:
+- **Big Shoulders Display (800–900 weight)** for all headings — condensed, industrial, high contrast
+- **Archivo** for body text — clean grotesque, readable at small sizes
+- **JetBrains Mono** for all UI labels, buttons, metadata, and credits — signals technical precision
 
-### Submarine/radar/torpedo metaphor
+Every button label, field label, and navigation element is monospaced and uppercase. That's a consistent typographic voice, not a default.
 
-Home screen replaced with an animated radar scope — concentric rings, a sweeping phosphor effect, neon blips that pulse and decay. Card deck imagery: question cards show a periscope view, feature cards show a sonar characteristic diagram, findings cards show a submarine, ★ criterion cards show a torpedo.
+### Color system — inverted and purposeful
 
-**Why:** The game is about detecting hidden things. The sonar metaphor is accurate: you're scanning an organization for signals that are hard to see directly. It also makes the home screen a conversation piece before the game starts.
+V1: white card on light blue-grey gradient, `#0b66ff` blue accent. Generic SaaS palette.
 
-### 3D card flip animations
+Current: `#E0E0D0` warm khaki background, `#333333` near-black ink, `#DFFF00` neon yellow-green as the sole accent. Zero blue anywhere. The neon appears only on primary buttons and one geometric header element. That restraint makes it read as a signal, not decoration.
 
-Cards flip on a Y-axis when drawn, revealing content on the back face.
+### Background texture — layered
 
-**Why:** Mirrors the physical card game experience that facilitators are already familiar with. The animation creates a moment of attention — players look at what was just revealed rather than skimming past it.
+V1: flat gradient.
+
+Current: two pseudo-elements stacked on the fixed background — a 28px hairline grid (`rgba(51,51,51,0.10)`) and a 3px dot matrix at 4% opacity with `mix-blend-mode: multiply`. Neither is perceptible individually. Together they read as aged technical paper. Invisible to most users consciously, but the whole thing feels materially different from a browser app.
+
+### Buttons — constructivist offset shadow
+
+V1: `border-radius: 8px`, white background, standard hover.
+
+Current: zero border-radius throughout. Primary buttons use a `4px 4px 0 var(--ink)` hard offset shadow — the constructivist/risograph print effect. On hover, the button lifts (`translateY(-2px)`, shadow grows to 6px). On click, it presses down (`translate(2px,2px)`, shadow collapses to zero). That's a physical press mechanic, not a color change.
+
+### Header — redesigned as a navigation instrument
+
+V1: centered `<h1>` with the app name in blue. Static.
+
+Current: sticky three-column grid — geometric bookend shapes (neon square, outlined circle, triangle) on the left; monospaced brand identifier in the center; tiny monospaced metadata on the right (`INICIO · EAFIT · MMXXV`). Reads like a technical instrument panel, consistent with the sonar metaphor.
+
+### Home screen — animated radar scope
+
+V1: centered tagline, a button, credits. Static.
+
+Current: animated radar sweep — rotating phosphor line, blips that ping and decay, telemetry readouts (`Range 3.2 km`, `Depth −120 m`, `Azimuth 274°`, `Speed 12 kn`, `Bearing N 34° W`). These do nothing functionally. They're world-building. Someone landing on V1 sees a form. Someone landing on current sees a world.
+
+### Screen transitions — animated
+
+V1: `display: none` / `display: block`. Instant.
+
+Current: `@keyframes screenIn` — `opacity: 0 → 1` with `translateY(8px → 0)` over 360ms. Subtle, but navigation feels intentional rather than instantaneous.
+
+### Card imagery — custom assets replacing emoji
+
+V1: `?` and `!` emoji inside styled divs.
+
+Current: `Pregunta.png`, `Caracteristica.png` for Phase 1 decks; `Submarine.png`, `Torpedo.png` for Phase 2. The submarine/torpedo pair extends the sonar metaphor into the mechanics — findings are torpedoes, Phase 2 is target acquisition.
+
+### Close button — redesigned as an action
+
+V1: small `×` text button, barely visible.
+
+Current: fixed 38×38px, monospaced font, hard border. On hover: background becomes danger red, icon rotates 90°, border changes color. A deliberate exit action with real visual feedback.
 
 ### PostHog instrumentation
 
-Added three tracked events:
-- `phase_1_started` — captures `players_count` and `org_type`
-- `phase_2_started` — captures `findings_count`
-- `results_reached` — captures `winners_count`
+Added three tracked events: `phase_1_started` (players_count, org_type), `phase_2_started` (findings_count), `results_reached` (winners_count).
 
-**Why:** No data existed on whether sessions were completing. The hypothesis was that drop-off was happening between Phase 1 and Phase 2, possibly due to time pressure or unclear instructions. These events create the minimal funnel needed to test that hypothesis without collecting personal data.
+**Why:** No data existed on whether sessions were completing. The hypothesis was that drop-off was happening between Phase 1 and Phase 2. These events create the minimal funnel to test that without collecting personal data.
 
 ### Confirm-exit modal
 
-Added a modal when users attempt to leave mid-game, warning that all session data will be lost.
-
-**Why:** In early sessions, facilitators accidentally navigated away during Phase 2 and lost all findings. The modal costs one click in a rare-but-not-zero scenario and prevents a session-ending error.
+**Why:** Facilitators were accidentally navigating away during Phase 2 and losing all findings. One click in a rare scenario prevents a session-ending error.
 
 ### VRIO warning on results screen
 
-Added a visible callout: "Winners should always be subjected to VRIO analysis to be validated as strategic resources or capabilities."
-
-**Why:** The game surfaces candidates, not conclusions. Without this, teams were treating high-scoring findings as confirmed strategic assets. The warning anchors the correct interpretation.
+**Why:** Without it, teams were treating high-scoring findings as confirmed strategic assets. The game surfaces candidates, not conclusions.
 
 ### Print-ready results
 
-Results screen renders cleanly when printed, hiding navigation and extraneous UI.
-
-**Why:** Facilitators need a physical artifact at the end of the session. The alternative — screenshotting — loses the Winner/Qualifier table structure.
+**Why:** Facilitators need a physical artifact. Screenshotting loses the Winner/Qualifier table structure.
 
 ### Responsive layout
 
-Three-column Phase 1 and Phase 2 stages reflow to two-column on tablet and single-column on mobile.
+Three-column stages reflow to two-column on tablet, single-column on mobile.
 
-**Why:** Some sessions happen on personal laptops; a few on tablets. The original desktop-only layout required horizontal scrolling below 1100px.
+**Why:** Some sessions happen on personal laptops; a few on tablets. The original layout required horizontal scrolling below 1100px.
 
 ---
 
 ## V2 — Late 2025
 
-**Theme: Fix the flow, not the look.**
+**Theme: Fix the flow. Don't touch the design.**
 
-V1 was played in a first real session. Problems observed:
+V1 was played in a first real session. The game logic worked. The interface didn't guide players through it.
 
+Problems observed:
 - Players didn't understand the Recurso/Capacidad distinction until mid-game
-- The Phase 1 → Phase 2 transition was ambiguous — no clear signal that exploration was over
+- The Phase 1 → Phase 2 transition was ambiguous — no clear signal that exploration was done
 - No per-turn guidance on how to articulate a finding
+- All buttons were visible simultaneously; players didn't know which one was "next"
 
-Changes:
-- Added inline guidance ("start with a noun for a resource, an infinitive verb for a capability") visible during each turn
-- Added automatic type detection with a visible "Tipo detectado" badge that appears briefly after submitting — makes the classification transparent and teaches the distinction through repetition
-- Made the "Go to Phase 2" button only appear after a minimum number of findings, removing the ambiguity
-- Added progress pips showing how many findings have been logged
+**What changed:**
 
-**Design unchanged** — V2 kept the blue-card system-font aesthetic from V1. The decision was to validate game logic before investing in design.
+**Progressive disclosure.** Buttons became disabled until the prior step completed. The sequence — select cards → write finding → answer Yes/No → next turn — is now enforced by the interface, not instructions text. You can't use it out of order.
+
+**Inline guidance.** A guidance strip appeared below the writing area: "Resource — start with a noun · Capability — start with an infinitive verb." Visible during every turn, not buried in a README.
+
+**Type detection badge.** After submitting a finding, a badge flashes briefly: "Tipo detectado: Recurso" or "Tipo detectado: Capacidad." Makes the classification transparent and teaches the distinction through repetition rather than explanation.
+
+**Progress pips.** Ten pip indicators below the writing area track how many findings have been logged. Players know where they are in Phase 1 without counting.
+
+**Phase 2 gate.** "Go to Phase 2" button only appeared after a minimum finding count. Previously it was always visible, and sessions were ending Phase 1 early.
+
+**Design unchanged.** V2 kept the blue-card system-font aesthetic from V1. The decision was to validate game logic and flow before investing in visual design.
 
 ---
 

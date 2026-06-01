@@ -83,15 +83,23 @@ It did. Players engaged with the prompts. The vote mechanic produced real debate
 
 What it revealed: the UI signaled "rough prototype," which reduced participant investment. The facilitator had to verbally explain Phase 1 instructions multiple times. The Phase 1 → Phase 2 transition was unclear.
 
-### V2 — Late 2025: Fix the flow
+### V2 — Late 2025: Fix the flow, don't touch the design
 
-Kept the visual design; fixed the UX. Added inline guidance visible during each turn. Made the type detection badge visible after submission (teaches the distinction without stopping the game). Added progress pips for Phase 1. Made "Go to Phase 2" only appear after a minimum finding count.
+Kept the V1 visual design (blue-card, system fonts). Fixed the interface. The core problem: all buttons were visible simultaneously and players didn't know which one was "next." V2 introduced progressive disclosure — buttons disabled until the prior step completed, making the sequence enforceable by the UI rather than instructions text.
+
+Also added: inline per-turn guidance ("resource → noun, capability → infinitive verb"), an automatic type detection badge that flashes briefly after each submission, progress pips tracking how many findings have been logged, and a Phase 2 gate so sessions couldn't leave Phase 1 prematurely.
+
+Decision rationale: validate game logic and flow before investing in visual design.
 
 ### V3 — May 2026: Make it feel worth taking seriously
 
-Full visual redesign. Constructivist design language: Big Shoulders Display + Archivo + JetBrains Mono, neon (#DFFF00) accent, grid/dot texture background, zero border-radius. Radar/sonar metaphor on home screen — animated sweep, phosphor blip decay, telemetry readouts. Custom card imagery (submarine, torpedo, periscope, radar). 3D card flip animations.
+The game worked. The tool didn't feel like it deserved the serious organizational context it was being used in.
 
-Functional additions: confirm-exit modal, responsive layout, print-ready results, PostHog instrumentation.
+Complete visual overhaul. Three-font constructivist system: Big Shoulders Display for headings, Archivo for body, JetBrains Mono for every label, button, and metadata element. Neon (#DFFF00) as the sole accent — used only on primary buttons and one geometric header element, nowhere else. Warm khaki background (#E0E0D0) with a layered grid + dot texture that reads as aged technical paper. Zero border-radius throughout. Primary buttons use a hard 4px offset shadow that physically presses on click.
+
+Home screen replaced with an animated radar scope: rotating phosphor sweep, blips that ping and decay, telemetry readouts (Range, Depth, Azimuth, Speed, Bearing). All fake, all world-building. Phase 2 card decks rethemedas submarine/torpedo — findings are torpedoes, Phase 2 is target acquisition.
+
+Functional additions: confirm-exit modal, responsive layout, print-ready results, PostHog instrumentation, screen entrance animations.
 
 ---
 
@@ -115,7 +123,21 @@ PostHog EU captures three events per session:
 
 These are prioritized by impact on the core hypothesis, not by implementation ease.
 
-### P0 — Validate funnel data (no-code)
+### P0 — In-game narrator (spy character)
+
+The current mental model problem: players believe they should answer the question card directly in the writing box. They read the question, they answer it. Wrong — the question is a conversation prompt; the writing box is for the *finding* that emerges from the conversation. The distinction between "answering a question" and "surfacing what the debate reveals about your organization" is the entire conceptual unlock for Phase 1.
+
+The instructions exist in multiple places — guidance strip, phase header, screen instruction text. Players don't read them under social pressure in a group setting. This is not a bug.
+
+**The solution:** a contextually aware in-game narrator consistent with the strategic intelligence aesthetic. When Phase 1 loads, a brief entry animation plays — the spy appears and explains the sequence while the relevant UI elements are highlighted in turn. Not a tutorial modal. A character who lives in the world of the game explaining the rules the way a game master would. Reference points: Bastion (narrator reacts to what you do), Portal (the world teaches you, not a help menu). A skip button exists for returning players.
+
+After the entry animation, the spy collapses to a small icon in the bottom-left corner. Clicking it at any moment triggers a contextually aware response — not generic help text, but a read of the current app state: which phase, which step, what action is expected, why it matters. The implementation is a function that evaluates state at click time and returns the right line in character voice.
+
+Phase 2 version is lighter — the spy appears briefly at entry to explain the tie-break rule and the Winner/Qualifier distinction, then recedes.
+
+**Long-term goal:** zero dependency on external onboarding. A group that has never seen the tool should be able to play a complete session correctly from the interface alone.
+
+### P1 — Validate funnel data (no-code)
 
 Wait for 10+ completed sessions in PostHog. Confirm or deny the Phase 1 drop-off hypothesis before building anything.
 
